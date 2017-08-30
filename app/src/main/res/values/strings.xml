@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Otobox</string>
+    <string name="action_settings">Settings</string>
+    <string name="parse_server_url">http://192.168.1.199:1337/parse/</string>
+    <string name="parse_app_id">LND78fpKYYoZOVSQE0m22Ws6bAV8OZxbT1W8UXPy</string>
+
+</resources>
