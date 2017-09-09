@@ -59,9 +59,9 @@ public class AboutActivity extends MaterialAboutActivity {
 
         advancedCardBuilder.addItem(new MaterialAboutActionItem.Builder()
                 .text("OnLongClickAction demo")
-                .icon(new IconicsDrawable(c)
+                .icon(new IconicsDrawable(context)
                         .icon(CommunityMaterial.Icon.cmd_hand_pointing_right)
-                        .color(ContextCompat.getColor(c, colorIcon))
+                        .color(ContextCompat.getColor(context, colorIcon))
                         .sizeDp(18))
                 .setOnLongClickAction(new MaterialAboutItemOnClickAction() {
                     @Override
