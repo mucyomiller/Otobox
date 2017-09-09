@@ -4,4 +4,24 @@
     <string name="parse_server_url">http://192.168.1.199:1337/parse/</string>
     <string name="parse_app_id">LND78fpKYYoZOVSQE0m22Ws6bAV8OZxbT1W8UXPy</string>
 
+
+    <string name="backdrop_title">OtoBox</string>
+    <string name="backdrop_subtitle">Choose Your Brand</string>
+    <string name="action_search">Search</string>
+    <string name="action_about">about</string>
+    <string name="title_activity_model">Model</string>
+    <string name="search_hint">search here...</string>
+    <string name="title_activity_buy">Buy</string>
+    <string name="tab_text_1">Body Parts</string>
+    <string name="tab_text_2">Oil &amp; Lubes</string>
+    <string name="tab_text_3">Light Systems</string>
+    <string name="tab_text_4">Engine Systems</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="action_cart">Cart</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="quality_label">Quality</string>
+    <string name="title_activity_year">Year</string>
+
 </resources>

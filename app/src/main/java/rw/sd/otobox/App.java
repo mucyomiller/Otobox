@@ -2,13 +2,18 @@ package rw.sd.otobox;
 
 import android.app.Application;
 
+import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
 import com.parse.Parse;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
- * Created by miller on 8/30/17.
+ * Created by mucyo miller on 8/30/17.
  */
 
 public class App  extends Application{
@@ -22,7 +27,6 @@ public class App  extends Application{
         // Can be Level.BASIC, Level.HEADERS, or Level.BODY
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.networkInterceptors().add(httpLoggingInterceptor);
-        // set applicationId and server based on the values in the Heroku settings.
         // any network interceptors must be added with the Configuration Builder given this syntax
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getResources().getString(R.string.parse_app_id)) // should correspond to APP_ID env variable

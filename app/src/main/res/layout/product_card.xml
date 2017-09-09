@@ -1,0 +1,130 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/card_margin"
+        android:elevation="3dp"
+        card_view:cardCornerRadius="@dimen/card_brand_radius">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:text="title"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="@dimen/brand_title_padding"
+                android:paddingRight="@dimen/brand_title_padding"
+                android:paddingTop="@dimen/brand_title_padding"
+                android:textColor="@color/brand_title"
+                android:textSize="@dimen/brand_title" />
+            <ImageView
+                android:id="@+id/thumbnail"
+                android:layout_below="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/product_cover_height"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="false"
+                android:focusableInTouchMode="false"
+                android:scaleType="centerInside" />
+            <LinearLayout
+                android:id="@+id/section_quality"
+                android:layout_below="@+id/thumbnail"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp">
+                <TextView
+                    android:id="@+id/quality_label"
+                    android:text="@string/quality_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/quality"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/brand_title"
+                    android:textSize="@dimen/brand_title"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/section_warranty"
+                android:layout_below="@+id/section_quality"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp">
+
+                <TextView
+                    android:id="@+id/warrantyText"
+                    android:text="Warranty"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <RatingBar
+                    android:id="@+id/warrantyRatingBar"
+                    android:numStars="3"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:isIndicator="true"
+                    android:stepSize="1"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/RatingBar"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:textStyle="bold"
+                android:text="5000 Rwf"
+                android:layout_below="@id/section_warranty"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/songs_count_padding_bottom"
+                android:paddingLeft="@dimen/brand_title_padding"
+                android:drawableRight="@drawable/icon_cart"
+                android:drawableEnd="@drawable/icon_cart"
+                android:paddingRight="@dimen/brand_title_padding"
+                android:textSize="@dimen/songs_count" />
+            <Button
+                android:id="@+id/addToCart"
+                android:layout_below="@+id/price"
+                android:text="Add To Cart"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
