@@ -18,6 +18,7 @@ import rw.sd.otobox.BuyActivity;
 import rw.sd.otobox.Models.Brand;
 import rw.sd.otobox.Models.Model;
 import rw.sd.otobox.R;
+import rw.sd.otobox.YearActivity;
 
 /**
  * Created by miller on 9/3/17.
@@ -66,7 +67,7 @@ public class ModelsAdapter extends RecyclerView.Adapter<ModelsAdapter.MyViewHold
         Glide.with(mContext).load(model.getThumbnail()).into(holder.thumbnail);
 
         holder.mHolder.setOnClickListener(v -> {
-            Intent mIntent = new Intent(v.getContext(), BuyActivity.class);
+            Intent mIntent = new Intent(v.getContext(), YearActivity.class);
             mIntent.putExtra("Model",model);
             mIntent.putExtra("Brand",mBrand);
             v.getContext().startActivity(mIntent);

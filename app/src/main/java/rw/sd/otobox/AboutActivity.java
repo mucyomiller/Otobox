@@ -1,6 +1,7 @@
 package rw.sd.otobox;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,7 +19,9 @@ import com.danielstone.materialaboutlibrary.items.MaterialAboutItemOnClickAction
 import com.danielstone.materialaboutlibrary.items.MaterialAboutTitleItem;
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard;
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList;
+import com.danielstone.materialaboutlibrary.util.OpenSourceLicense;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 public class AboutActivity extends MaterialAboutActivity {
@@ -28,67 +31,178 @@ public class AboutActivity extends MaterialAboutActivity {
     public static final int THEME_DARK_LIGHTBAR = 2;
     public static final int THEME_DARK_DARKBAR = 3;
     public static final int THEME_CUSTOM_CARDVIEW = 4;
-
     protected int colorIcon = R.color.mal_color_icon_light_theme;
 
     @NonNull
     @Override
-    protected MaterialAboutList getMaterialAboutList(@NonNull Context context) {
-        MaterialAboutCard.Builder advancedCardBuilder = new MaterialAboutCard.Builder();
-        advancedCardBuilder.title("Advanced");
+    protected MaterialAboutList getMaterialAboutList(@NonNull Context c) {
+        MaterialAboutCard.Builder appCardBuilder = new MaterialAboutCard.Builder();
 
-        advancedCardBuilder.addItem(new MaterialAboutTitleItem.Builder()
-                .text("TitleItem OnClickAction")
+        // Add items to card
+
+        appCardBuilder.addItem(new MaterialAboutTitleItem.Builder()
+                .text("Otobox")
+                .desc("© 2017 sd.rw")
                 .icon(R.mipmap.ic_launcher)
-                .setOnClickAction(ConvenienceBuilder.createWebsiteOnClickAction(context, Uri.parse("http://sd.rw")))
                 .build());
 
-        advancedCardBuilder.addItem(new MaterialAboutActionItem.Builder()
-                .text("Snackbar demo")
-                .icon(new IconicsDrawable(context)
-                        .icon(CommunityMaterial.Icon.cmd_code_tags)
-                        .color(ContextCompat.getColor(context, colorIcon))
+        appCardBuilder.addItem(ConvenienceBuilder.createVersionActionItem(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_info_outline)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "Version",
+                false));
+
+        appCardBuilder.addItem(new MaterialAboutActionItem.Builder()
+                .text("Changelog")
+                .icon(new IconicsDrawable(c)
+                        .icon(CommunityMaterial.Icon.cmd_history)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18))
+                .setOnClickAction(ConvenienceBuilder.createWebViewDialogOnClickAction(c, "Releases", "some releases\n one\n two", false, false))
+                .build());
+
+        appCardBuilder.addItem(new MaterialAboutActionItem.Builder()
+                .text("Licenses")
+                .icon(new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
                         .sizeDp(18))
                 .setOnClickAction(new MaterialAboutItemOnClickAction() {
                     @Override
                     public void onClick() {
-                        Snackbar.make(((AboutActivity) context).findViewById(R.id.mal_material_about_activity_coordinator_layout), "Test", Snackbar.LENGTH_SHORT).show();
+                        Intent intent = new Intent(c, LicenseActivity.class);
+                        intent.putExtra(AboutActivity.THEME_EXTRA, getIntent().getIntExtra(THEME_EXTRA, THEME_LIGHT_DARKBAR));
+                        c.startActivity(intent);
                     }
                 })
                 .build());
 
-        advancedCardBuilder.addItem(new MaterialAboutActionItem.Builder()
-                .text("OnLongClickAction demo")
-                .icon(new IconicsDrawable(context)
-                        .icon(CommunityMaterial.Icon.cmd_hand_pointing_right)
-                        .color(ContextCompat.getColor(context, colorIcon))
-                        .sizeDp(18))
-                .setOnLongClickAction(new MaterialAboutItemOnClickAction() {
-                    @Override
-                    public void onClick() {
-                        Toast.makeText(context, "Long pressed", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .build());
 
-        final MaterialAboutActionItem dynamicItem = new MaterialAboutActionItem.Builder()
-                .text("Dynamic UI")
-                .subText("Tap for a random number.")
-                .icon(new IconicsDrawable(context)
-                        .icon(CommunityMaterial.Icon.cmd_refresh)
-                        .color(ContextCompat.getColor(context, colorIcon)
-                        ).sizeDp(18))
-                .build();
-        dynamicItem.setOnClickAction(new MaterialAboutItemOnClickAction() {
-            @Override
-            public void onClick() {
-                dynamicItem.setSubText("Random number: " + ((int) (Math.random() * 10)));
-                refreshMaterialAboutList();
-            }
-        });
-        advancedCardBuilder.addItem(dynamicItem);
+        MaterialAboutCard.Builder convenienceCardBuilder = new MaterialAboutCard.Builder();
 
-        return Demo.createMaterialAboutList(context, colorIcon, getIntent().getIntExtra(THEME_EXTRA, THEME_LIGHT_DARKBAR)).addCard(advancedCardBuilder.build());
+        convenienceCardBuilder.title("About Us");
+
+        convenienceCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
+                new IconicsDrawable(c)
+                        .icon(CommunityMaterial.Icon.cmd_earth)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "Visit Website",
+                true,
+                Uri.parse("http://otobox.com")));
+
+        convenienceCardBuilder.addItem(ConvenienceBuilder.createRateActionItem(c,
+                new IconicsDrawable(c)
+                        .icon(CommunityMaterial.Icon.cmd_star)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "Rate this app",
+                null
+        ));
+
+        convenienceCardBuilder.addItem(ConvenienceBuilder.createEmailItem(c,
+                new IconicsDrawable(c)
+                        .icon(CommunityMaterial.Icon.cmd_email)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "Send an email",
+                true,
+                "info@otobox.com",
+                "Help about Otobox"));
+
+        convenienceCardBuilder.addItem(ConvenienceBuilder.createPhoneItem(c,
+                new IconicsDrawable(c)
+                        .icon(CommunityMaterial.Icon.cmd_phone)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "Call Us",
+                true,
+                "+250 XXX XXX XXX"));
+
+        convenienceCardBuilder.addItem(ConvenienceBuilder.createMapItem(c,
+                new IconicsDrawable(c)
+                        .icon(CommunityMaterial.Icon.cmd_map)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "Visit Us",
+                null,
+                "Kigali"));
+
+        return new MaterialAboutList(appCardBuilder.build(), convenienceCardBuilder.build());
+    }
+
+    public static MaterialAboutList createMaterialAboutLicenseList(final Context c, int colorIcon) {
+
+        MaterialAboutCard rxjavaLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "Rxjava", "2016", "RxJava Contributors",
+                OpenSourceLicense.APACHE_2);
+        MaterialAboutCard rxandroidLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "RxAndroid", "2015", "The RxAndroid authors",
+                OpenSourceLicense.APACHE_2);
+        MaterialAboutCard okhttpLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "okhttp", "2014", "Square Inc.",
+                OpenSourceLicense.APACHE_2);
+        MaterialAboutCard rxnetworkLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "rxnetwork", "2016", "Piotr Wittchen",
+                OpenSourceLicense.APACHE_2);
+
+        MaterialAboutCard glideLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "Glide", "2014", "Sam Judd",
+                OpenSourceLicense.APACHE_2);
+        MaterialAboutCard androidIconicsLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "Android Iconics", "2016", "Mike Penz",
+                OpenSourceLicense.APACHE_2);
+
+        MaterialAboutCard leakCanaryLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "LeakCanary", "2015", "Square, Inc",
+                OpenSourceLicense.APACHE_2);
+        MaterialAboutCard materialAboutLIbraryLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "material-about-library", "2016", "Daniel Stone",
+                OpenSourceLicense.APACHE_2);
+
+        return new MaterialAboutList(
+                rxjavaLicenseCard,
+                rxandroidLicenseCard,
+                okhttpLicenseCard,
+                rxnetworkLicenseCard,
+                glideLicenseCard,
+                materialAboutLIbraryLicenseCard,
+                androidIconicsLicenseCard,
+                leakCanaryLicenseCard);
     }
 
     @Nullable
@@ -98,9 +212,7 @@ public class AboutActivity extends MaterialAboutActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         Log.i("test", "onCreate: " + getIntent().getIntExtra(THEME_EXTRA, THEME_LIGHT_DARKBAR));
         switch (getIntent().getIntExtra(THEME_EXTRA, THEME_LIGHT_DARKBAR)) {
             case THEME_LIGHT_LIGHTBAR:
@@ -124,6 +236,8 @@ public class AboutActivity extends MaterialAboutActivity {
                 colorIcon = R.color.mal_color_icon_dark_theme;
                 break;
         }
+
+        super.onCreate(savedInstanceState);
 
     }
 }

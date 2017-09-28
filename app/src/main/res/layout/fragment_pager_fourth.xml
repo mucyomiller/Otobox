@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="rw.sd.otobox.Fragments.LubeFragment">
+    tools:context="rw.sd.otobox.Fragments.FourthPagerFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -13,4 +13,5 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp" />
+
 </FrameLayout>

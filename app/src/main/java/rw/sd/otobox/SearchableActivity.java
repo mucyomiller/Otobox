@@ -65,8 +65,13 @@ public class SearchableActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            return true;
+        switch (id){
+            case R.id.action_search:
+                return true;
+            case R.id.action_about:
+                Intent mSearchIntent = new Intent(SearchableActivity.this,AboutActivity.class);
+                startActivity(mSearchIntent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

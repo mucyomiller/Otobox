@@ -8,17 +8,27 @@ import android.os.Parcelable;
  */
 
 public class Brand implements Parcelable {
+    private String id;
     private String name;
     private int numOfModels;
-    private int thumbnail;
+    private String thumbnail;
 
     public Brand() {
     }
 
-    public Brand(String name, int numOfModels, int thumbnail) {
+    public Brand(String id, String name, int numOfModels, String thumbnail) {
+        this.id = id;
         this.name = name;
         this.numOfModels = numOfModels;
         this.thumbnail = thumbnail;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -37,11 +47,11 @@ public class Brand implements Parcelable {
         this.numOfModels = numOfModels;
     }
 
-    public int getThumbnail() {
+    public String getThumbnail() {
         return thumbnail;
     }
 
-    public void setThumbnail(int thumbnail) {
+    public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
 
@@ -53,15 +63,17 @@ public class Brand implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
         dest.writeString(this.name);
         dest.writeInt(this.numOfModels);
-        dest.writeInt(this.thumbnail);
+        dest.writeString(this.thumbnail);
     }
 
     protected Brand(Parcel in) {
+        this.id = in.readString();
         this.name = in.readString();
         this.numOfModels = in.readInt();
-        this.thumbnail = in.readInt();
+        this.thumbnail = in.readString();
     }
 
     public static final Parcelable.Creator<Brand> CREATOR = new Parcelable.Creator<Brand>() {

@@ -55,5 +55,8 @@ dependencies {
     implementation "com.mikepenz:iconics-core:2.8.2@aar"
     implementation 'com.mikepenz:google-material-typeface:2.2.0.3.original@aar'
     implementation 'com.mikepenz:community-material-typeface:1.7.22.1@aar'
+    implementation "com.github.akarnokd:rxjava2-extensions:0.16.0"
+    implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
 
 }

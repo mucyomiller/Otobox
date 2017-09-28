@@ -64,7 +64,7 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyViewHold
         Glide.with(mContext).load(brand.getThumbnail()).into(holder.thumbnail);
 
         holder.mHolder.setOnClickListener(v -> {
-            Intent mIntent = new Intent(v.getContext(),YearActivity.class);
+            Intent mIntent = new Intent(v.getContext(),ModelActivity.class);
             mIntent.putExtra("Brand",brand);
             v.getContext().startActivity(mIntent);
         });

@@ -3,6 +3,7 @@ package rw.sd.otobox;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -23,12 +24,21 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
 import rw.sd.otobox.Adapters.BrandsAdapter;
 import rw.sd.otobox.Models.Brand;
+import rw.sd.otobox.Models.Model;
+import rx.parse2.ParseObservable;
 
 /**
  * Created by mucyo miller on 8/30/17.
@@ -38,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private BrandsAdapter adapter;
     private List<Brand> brandList;
-
+    private int mCount =0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,112 +118,49 @@ public class MainActivity extends AppCompatActivity {
      * Adding few brands
      */
     private void prepareBrands() {
-        int[] covers = new int[]{
-                R.drawable.car1,
-                R.drawable.car2,
-                R.drawable.car3,
-                R.drawable.car4,
-                R.drawable.car5,
-                R.drawable.car6,
-                R.drawable.car7,
-                R.drawable.car8,
-                R.drawable.car9,
-                R.drawable.car10,
-                R.drawable.car11,
-                R.drawable.car12,
-                R.drawable.car13,
-                R.drawable.car14,
-                R.drawable.car15,
-                R.drawable.car16,
-                R.drawable.car17,
-                R.drawable.car18,
-                R.drawable.car19,
-                R.drawable.car20,
-                R.drawable.car21,
-                R.drawable.car22,
-                R.drawable.car23,
-                R.drawable.car24,
-                R.drawable.car25,
-                R.drawable.car26};
 
-        Brand a = new Brand("NISSAN", 10, covers[0]);
-        brandList.add(a);
+//        ParseObject Brand = new ParseObject("Brand");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Brand");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> Brand, ParseException e) {
+                Log.d(TAG, "counter: "+Brand.size());
+                for (ParseObject mBrand: Brand) {
+//                    Log.d(TAG, "BRAND FOUNDED =>"+mBrand.get("name")+" Brand url"+mBrand.get("url"));
+                    //getting model count
+                    //ParseQuery<ParseObject> innerQuery = ParseQuery.getQuery("Brand");
+                    //innerQuery.whereEqualTo("name",mBrand.get("name").toString());
+                    ParseQuery<ParseObject> querye = ParseQuery.getQuery("Model");
+                    querye.include("parent");
+                    querye.whereEqualTo("parent",mBrand);
+//
+//                                        query.whereMatchesQuery("parent",innerQuery);
+                    querye.findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(List<ParseObject> model, ParseException e) {
+                            mCount  =model.size();
+                            Log.d(TAG, "model counter: "+mCount);
+                        }
+                    });
 
-        a = new Brand("DAIHATSU", 8, covers[1]);
-        brandList.add(a);
+                    Brand a = new Brand(mBrand.getObjectId(),mBrand.get("name").toString(), mCount, getString(R.string.server_base_url)+mBrand.get("url").toString());
+                    brandList.add(a);
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
 
-        a = new Brand("HONDA", 11, covers[2]);
-        brandList.add(a);
 
-        a = new Brand("HINO", 12, covers[3]);
-        brandList.add(a);
+//        query.getInBackground("xWMyZ4YEGZ", new GetCallback<ParseObject>() {
+//            public void done(ParseObject object, ParseException e) {
+//                if (e == null) {
+//                    // object will be your game score
+//                } else {
+//                    // something went wrong
+//                }
+//            }
+//        });
 
-        a = new Brand("MITSUOKA", 14, covers[4]);
-        brandList.add(a);
-
-        a = new Brand("TOYOTA", 1, covers[5]);
-        brandList.add(a);
-
-        a = new Brand("MITSUBISHI", 11, covers[6]);
-        brandList.add(a);
-
-        a = new Brand("ACURA", 14, covers[7]);
-        brandList.add(a);
-
-        a = new Brand("??", 11, covers[8]);
-        brandList.add(a);
-
-        a = new Brand("ISUZU", 17, covers[9]);
-        brandList.add(a);
-
-        a = new Brand("SUZUKI", 19, covers[10]);
-        brandList.add(a);
-
-        a = new Brand("INFINITI", 8, covers[11]);
-        brandList.add(a);
-
-        a = new Brand("DATSUN", 11, covers[12]);
-        brandList.add(a);
-
-        a = new Brand("SUBARU", 12, covers[13]);
-        brandList.add(a);
-
-        a = new Brand("??", 14, covers[14]);
-        brandList.add(a);
-
-        a = new Brand("MAZDA", 1, covers[15]);
-        brandList.add(a);
-
-        a = new Brand("BENZ", 11, covers[16]);
-        brandList.add(a);
-
-        a = new Brand("BMW", 14, covers[17]);
-        brandList.add(a);
-
-        a = new Brand("AUDI", 11, covers[18]);
-        brandList.add(a);
-
-        a = new Brand("LAMBORGHNI", 17, covers[19]);
-        brandList.add(a);
-
-        a = new Brand("VORSKWAGON", 19, covers[20]);
-        brandList.add(a);
-        a = new Brand("MINI", 8, covers[21]);
-        brandList.add(a);
-
-        a = new Brand("JAGUAR", 11, covers[22]);
-        brandList.add(a);
-
-        a = new Brand("HYUNDAI", 12, covers[23]);
-        brandList.add(a);
-
-        a = new Brand("BENTLEY", 14, covers[24]);
-        brandList.add(a);
-
-        a = new Brand("KIA", 1, covers[25]);
-        brandList.add(a);
-
-        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -286,8 +233,14 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            return true;
+
+        switch (id){
+            case R.id.action_search:
+                return true;
+            case R.id.action_about:
+                Intent mSearchIntent = new Intent(MainActivity.this,AboutActivity.class);
+                startActivity(mSearchIntent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

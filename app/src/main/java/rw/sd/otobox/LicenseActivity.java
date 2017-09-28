@@ -10,7 +10,7 @@ public class LicenseActivity extends AboutActivity {
 
     @NonNull @Override
     protected MaterialAboutList getMaterialAboutList(@NonNull final Context c) {
-        return Demo.createMaterialAboutLicenseList(c, colorIcon);
+        return AboutActivity.createMaterialAboutLicenseList(c, colorIcon);
     }
 
     @Override

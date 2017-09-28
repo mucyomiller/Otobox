@@ -51,16 +51,20 @@
                 <TextView
                     android:id="@+id/quality_label"
                     android:text="@string/quality_label"
+                    android:layout_gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
                 <TextView
                     android:id="@+id/quality"
                     android:layout_width="match_parent"
+                    android:textAlignment="textEnd"
+                    android:layout_gravity="end"
                     android:layout_height="wrap_content"
                     android:textColor="@color/brand_title"
                     android:textSize="@dimen/brand_title"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:gravity="end" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/section_warranty"
@@ -103,12 +107,12 @@
                 android:text="5000 Rwf"
                 android:layout_below="@id/section_warranty"
                 android:gravity="center_vertical"
-                android:paddingBottom="@dimen/songs_count_padding_bottom"
+                android:paddingBottom="@dimen/models_count_padding_bottom"
                 android:paddingLeft="@dimen/brand_title_padding"
                 android:drawableRight="@drawable/icon_cart"
                 android:drawableEnd="@drawable/icon_cart"
                 android:paddingRight="@dimen/brand_title_padding"
-                android:textSize="@dimen/songs_count" />
+                android:textSize="@dimen/model_count" />
             <Button
                 android:id="@+id/addToCart"
                 android:layout_below="@+id/price"

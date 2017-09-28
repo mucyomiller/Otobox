@@ -41,10 +41,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title"
-                android:paddingBottom="@dimen/songs_count_padding_bottom"
+                android:paddingBottom="@dimen/models_count_padding_bottom"
                 android:paddingLeft="@dimen/brand_title_padding"
                 android:paddingRight="@dimen/brand_title_padding"
-                android:textSize="@dimen/songs_count" />
+                android:textSize="@dimen/model_count" />
 
         </RelativeLayout>
 

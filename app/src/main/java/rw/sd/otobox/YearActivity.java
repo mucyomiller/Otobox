@@ -25,6 +25,7 @@ import java.util.Calendar;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 import rw.sd.otobox.Models.Brand;
+import rw.sd.otobox.Models.Model;
 
 
 public class YearActivity extends AppCompatActivity {
@@ -46,10 +47,12 @@ public class YearActivity extends AppCompatActivity {
         numberPicker.setMaxValue(CURRENT_YEAR);
         numberPicker.setMinValue(CURRENT_YEAR - 50);
         Brand mBrand = getIntent().getParcelableExtra("Brand");
+        Model mModel = getIntent().getParcelableExtra("Model");
         year_cover_text.setText(mBrand.getName() +" MODEL YEAR");
             mGoButton.setOnClickListener(v -> {
-                Intent mIntent = new Intent(v.getContext(),ModelActivity.class);
+                Intent mIntent = new Intent(v.getContext(),BuyActivity.class);
                 mIntent.putExtra("Brand",mBrand);
+                mIntent.putExtra("Model",mModel);
                 Log.d(TAG, "onCreate: selected year =>"+ numberPicker.getValue());
                 mIntent.putExtra("SelectedYear",numberPicker.getValue());
                 v.getContext().startActivity(mIntent);
@@ -81,8 +84,13 @@ public class YearActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            return true;
+        switch (id){
+            case R.id.action_search:
+                return true;
+            case R.id.action_about:
+                Intent mSearchIntent = new Intent(YearActivity.this,AboutActivity.class);
+                startActivity(mSearchIntent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -64,7 +64,18 @@
             android:name=".YearActivity"
             android:label="@string/title_activity_year"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AboutActivity"></activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="About"
+            android:theme="@style/AppTheme.MaterialAboutActivity.Light.DarkActionBar" />
+        <activity
+            android:name=".LicenseActivity"
+            android:label="licenses"
+            android:theme="@style/AppTheme.MaterialAboutActivity.Light.DarkActionBar" />
+        <activity android:name=".OrderActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".CartActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

@@ -3,14 +3,21 @@ package rw.sd.otobox.Models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.mucyomiller.shoppingcart.model.Saleable;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * Created by miller on 9/7/17.
  */
 
-public class Product implements Parcelable {
-    private String title;
+public class Product implements Saleable, Serializable, Parcelable {
+    
+    private static final long serialVersionUID = -4073256626483275668L;
+    
+    private int pId;
+    private String name;
     private String quality;
     private int thumbnail;
     private int warranty;
@@ -19,21 +26,22 @@ public class Product implements Parcelable {
     public Product() {
     }
 
-    public Product(String title, String quality, int thumbnail, int warranty, BigDecimal price) {
-        this.title = title;
+    public Product(int pId,String name, String quality, int thumbnail, int warranty, BigDecimal price) {
+        this.pId = pId;
+        this.name = name;
         this.quality = quality;
         this.thumbnail = thumbnail;
         this.warranty = warranty;
         this.price = price;
     }
 
-    public String getTitle() {
-        return title;
-    }
+    public int getpId() {return pId;}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public void setpId(int pId) {this.pId = pId;}
+
+    public String getName() {return name;}
+
+    public void setName(String name) {this.name = name;}
 
     public String getQuality() {
         return quality;
@@ -67,6 +75,23 @@ public class Product implements Parcelable {
         this.price = price;
     }
 
+    public int hashCode() {
+        final int prime = 31;
+        int hash = 1;
+        hash = hash* prime + pId;
+        hash = hash * prime + (name == null?0:name.hashCode());
+        hash = hash * prime + (price==null?0:price.hashCode());
+        hash = hash * prime + (quality == null?0:quality.hashCode());
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (!(o instanceof Product)) return false;
+        return (this.pId == ((Product)o).getpId());
+    }
+
 
     @Override
     public int describeContents() {
@@ -75,7 +100,8 @@ public class Product implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.title);
+        dest.writeInt(this.pId);
+        dest.writeString(this.name);
         dest.writeString(this.quality);
         dest.writeInt(this.thumbnail);
         dest.writeInt(this.warranty);
@@ -83,7 +109,8 @@ public class Product implements Parcelable {
     }
 
     protected Product(Parcel in) {
-        this.title = in.readString();
+        this.pId = in.readInt();
+        this.name = in.readString();
         this.quality = in.readString();
         this.thumbnail = in.readInt();
         this.warranty = in.readInt();

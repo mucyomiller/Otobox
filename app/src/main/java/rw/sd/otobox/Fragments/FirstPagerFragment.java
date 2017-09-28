@@ -25,14 +25,13 @@ import rw.sd.otobox.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LubeFragment extends Fragment {
-
+public class FirstPagerFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProductsAdapter adapter;
     private List<Product> productList;
     private Context mContext;
 
-    public LubeFragment() {
+    public FirstPagerFragment() {
         // Required empty public constructor
     }
 
@@ -41,9 +40,8 @@ public class LubeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_lube, container, false);
-        //fragment content here
-
+        View view = inflater.inflate(R.layout.fragment_pager_first, container, false);
+        //fragement content here
         mContext = view.getContext();
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
@@ -51,7 +49,7 @@ public class LubeFragment extends Fragment {
         adapter = new ProductsAdapter(getContext(), productList);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new LubeFragment.GridSpacingItemDecoration(2, dpToPx(5), true));
+        recyclerView.addItemDecoration(new FirstPagerFragment.GridSpacingItemDecoration(2, dpToPx(5), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
         prepareProducts();
@@ -64,33 +62,32 @@ public class LubeFragment extends Fragment {
      */
     private void prepareProducts() {
         int[] covers = new int[]{
-                R.drawable.lubes,
-                R.drawable.lubes,
-                R.drawable.lubes,
-                R.drawable.lubes,
-                R.drawable.lubes,
-                R.drawable.lubes
+                R.drawable.body_part,
+                R.drawable.car_body,
+                R.drawable.car_body,
+                R.drawable.car_body,
+                R.drawable.body_part,
+                R.drawable.body_part
         };
 
-        Product a = new Product("product1","good",covers[0],2 , BigDecimal.valueOf(5000));
+        Product a = new Product(1,"product1","good",covers[0],2 ,BigDecimal.valueOf(5000));
         productList.add(a);
 
-        a = new Product("product2","excellent", covers[1],3,BigDecimal.valueOf(1000));
+        a = new Product(2,"product2","excellent", covers[1],3,BigDecimal.valueOf(1000));
         productList.add(a);
 
-        a = new Product("product3","good", covers[2],1,BigDecimal.valueOf(2000));
+        a = new Product(3,"product3","good", covers[2],1,BigDecimal.valueOf(2000));
         productList.add(a);
 
-        a = new Product("product4","good", covers[3],2,BigDecimal.valueOf(4000));
+        a = new Product(4,"product4","good", covers[3],2,BigDecimal.valueOf(4000));
         productList.add(a);
-        a = new Product("product5","good", covers[4],3,BigDecimal.valueOf(5000));
+        a = new Product(5,"product5","good", covers[4],3,BigDecimal.valueOf(5000));
         productList.add(a);
 
-        a = new Product("product6","bad", covers[5],1,BigDecimal.valueOf(9000));
+        a = new Product(6,"product6","bad", covers[5],1,BigDecimal.valueOf(9000));
         productList.add(a);
         adapter.notifyDataSetChanged();
     }
-
 
     /**
      * RecyclerView item decoration - give equal margin around grid item
@@ -137,5 +134,6 @@ public class LubeFragment extends Fragment {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
+
 
 }

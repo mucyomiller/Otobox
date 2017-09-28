@@ -1,6 +1,7 @@
 package rw.sd.otobox;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +19,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import java.util.ArrayList;
 import java.util.List;
 import rw.sd.otobox.Adapters.ModelsAdapter;
@@ -24,12 +32,15 @@ import rw.sd.otobox.Models.Brand;
 import rw.sd.otobox.Models.Model;
 
 public class ModelActivity extends AppCompatActivity {
+    private static final String TAG = "ModelActivity";
     private RecyclerView recyclerViewModel;
     private ImageView  brand_logo;
     private TextView brand_title;
     private ModelsAdapter adapter;
     private List<Model> modelList;
     private Context mContext;
+    private Brand mBrand;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +55,7 @@ public class ModelActivity extends AppCompatActivity {
         brand_logo = (ImageView) findViewById(R.id.brand_logo);
         brand_title = (TextView) findViewById(R.id.brand_title);
 
-        Brand mBrand = getIntent().getParcelableExtra("Brand");
+        mBrand = getIntent().getParcelableExtra("Brand");
         brand_title.setText(mBrand.getName());
         Glide.with(mContext).load(mBrand.getThumbnail()).into(brand_logo);
 
@@ -71,56 +82,23 @@ public class ModelActivity extends AppCompatActivity {
      * Adding few brands
      */
     private void prepareModels() {
-        int[] covers = new int[]{
-                R.drawable.sports_car_top_down_silhouette,
-                R.drawable.sport_car_icon_10,
-                R.drawable.sport_car_thenoun,
-                R.drawable.sports_car_top_down_silhouette,
-                R.drawable.sport_car_icon_10,
-                R.drawable.sport_car_icon_10,
-                R.drawable.audi_tt_512,
-                R.drawable.sports_car_top_down_silhouette,
-                R.drawable.sport_car_thenoun,
-                R.drawable.sport_car_icon_10,
-                R.drawable.sport_car_thenoun,
-                R.drawable.sports_car_top_down_silhouette
-        };
 
-        Model a = new Model(1,"BMW 1 Series", covers[0]);
-        modelList.add(a);
-
-        a = new Model(2,"BMW 2 Series", covers[1]);
-        modelList.add(a);
-
-        a = new Model(3,"BMW 3 Series", covers[2]);
-        modelList.add(a);
-
-        a = new Model(4, "BMW 4 Series", covers[3]);
-        modelList.add(a);
-
-        a = new Model(5,"BMW 5 Series", covers[4]);
-        modelList.add(a);
-
-        a = new Model(6,"Gran Turismo", covers[5]);
-        modelList.add(a);
-
-        a = new Model(7,"BMW 6 Series", covers[6]);
-        modelList.add(a);
-
-        a = new Model(8,"BMW 7 Series", covers[7]);
-        modelList.add(a);
-
-        a = new Model(9,"M3", covers[8]);
-        modelList.add(a);
-        a = new Model(7,"M4", covers[9]);
-        modelList.add(a);
-
-        a = new Model(8,"M5", covers[10]);
-        modelList.add(a);
-
-        a = new Model(9,"M6", covers[11]);
-        modelList.add(a);
-        adapter.notifyDataSetChanged();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Model");
+        query.include("parent");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> Model, ParseException e) {
+                for (ParseObject mModel: Model) {
+                    if(mModel.getParseObject("parent").getObjectId().equals(mBrand.getId())){
+//                        Log.d(TAG, " Model =>"+mModel.get("name").toString());
+//                        Log.d(TAG, "Brand  => "+mModel.getParseObject("parent").get("name"));
+                        Model a = new Model(mModel.getObjectId(),mModel.get("name").toString(), getString(R.string.server_base_url)+mModel.get("url").toString());
+                        modelList.add(a);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     /**
@@ -185,8 +163,13 @@ public class ModelActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            return true;
+        switch (id){
+            case R.id.action_search:
+                return true;
+            case R.id.action_about:
+                Intent mSearchIntent = new Intent(ModelActivity.this,AboutActivity.class);
+                startActivity(mSearchIntent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

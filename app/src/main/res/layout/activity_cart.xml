@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="rw.sd.otobox.CartActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/appbar_padding_top"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_weight="1"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="@string/app_name">
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:id="@+id/recyclerview_section"
+        android:layout_below="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/viewBg"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="rw.sd.otobox.MainActivity"
+        tools:showIn="@layout/activity_main">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp"
+            android:clipToPadding="false"
+            android:scrollbars="vertical" />
+        <RelativeLayout
+            android:id="@+id/checkout_section"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" >
+            <TextView
+                android:id="@+id/total_price_label"
+                android:layout_width="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:gravity="center_vertical"
+                android:text="TOTAL PRICE:"
+                android:layout_height="match_parent" />
+            <TextView
+                android:id="@+id/total_price"
+                android:gravity="center_vertical"
+                android:layout_toEndOf="@+id/total_price_label"
+                android:layout_toRightOf="@+id/total_price_label"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <Button
+                android:id="@+id/checkout"
+                android:layout_width="wrap_content"
+                android:textColor="@color/white"
+                android:text="Proceed to Checkout"
+                android:paddingRight="1dp"
+                android:paddingEnd="1dp"
+                android:paddingLeft="1dp"
+                android:paddingStart="1dp"
+                android:textAllCaps="true"
+                android:background="@color/colorPrimary"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_height="match_parent"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

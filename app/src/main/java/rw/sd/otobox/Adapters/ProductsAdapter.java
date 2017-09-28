@@ -3,6 +3,7 @@ package rw.sd.otobox.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.mucyomiller.shoppingcart.model.Cart;
+import com.mucyomiller.shoppingcart.util.CartHelper;
 
 import java.util.List;
 
@@ -26,6 +29,8 @@ import rw.sd.otobox.R;
  */
 
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyViewHolder> {
+
+    private static final String TAG = "ProductsAdapter";
 
     private Context mContext;
     private List<Product> productList;
@@ -70,11 +75,14 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
     @Override
     public void onBindViewHolder(final ProductsAdapter.MyViewHolder holder, int position) {
         final Product product = productList.get(position);
-        holder.title.setText(product.getTitle());
+        holder.title.setText(product.getName());
         holder.quality.setText(product.getQuality());
         holder.warranty.setRating(product.getWarranty());
         holder.price.setText(product.getPrice().toString()+" Rwf");
         holder.addToCart.setOnClickListener(v -> {
+            Cart cart =  CartHelper.getCart();
+            Log.d(TAG, "Adding product: " + product.getName());
+            cart.add(product,1);
             Toast.makeText(mContext, "Added to Cart!", Toast.LENGTH_SHORT).show();
         });
 

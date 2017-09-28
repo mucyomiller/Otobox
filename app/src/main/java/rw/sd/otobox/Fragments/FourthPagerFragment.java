@@ -25,13 +25,13 @@ import rw.sd.otobox.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EngineFragment extends Fragment {
+public class FourthPagerFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProductsAdapter adapter;
     private List<Product> productList;
     private Context mContext;
 
-    public EngineFragment() {
+    public FourthPagerFragment() {
         // Required empty public constructor
     }
 
@@ -40,7 +40,7 @@ public class EngineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_engine, container, false);
+        View view = inflater.inflate(R.layout.fragment_pager_first, container, false);
         //fragment content here
 
         mContext = view.getContext();
@@ -50,7 +50,7 @@ public class EngineFragment extends Fragment {
         adapter = new ProductsAdapter(getContext(), productList);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new EngineFragment.GridSpacingItemDecoration(2, dpToPx(5), true));
+        recyclerView.addItemDecoration(new FourthPagerFragment.GridSpacingItemDecoration(2, dpToPx(5), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
         prepareProducts();
@@ -71,21 +71,21 @@ public class EngineFragment extends Fragment {
                 R.drawable.engine_1
         };
 
-        Product a = new Product("product1","good",covers[0],2 , BigDecimal.valueOf(5000));
+        Product a = new Product(1,"product1","good",covers[0],2 , BigDecimal.valueOf(5000));
         productList.add(a);
 
-        a = new Product("product2","excellent", covers[1],3,BigDecimal.valueOf(1000));
+        a = new Product(2,"product2","excellent", covers[1],3,BigDecimal.valueOf(1000));
         productList.add(a);
 
-        a = new Product("product3","good", covers[2],1,BigDecimal.valueOf(2000));
+        a = new Product(3,"product3","good", covers[2],1,BigDecimal.valueOf(2000));
         productList.add(a);
 
-        a = new Product("product4","good", covers[3],2,BigDecimal.valueOf(4000));
+        a = new Product(4,"product4","good", covers[3],2,BigDecimal.valueOf(4000));
         productList.add(a);
-        a = new Product("product5","good", covers[4],3,BigDecimal.valueOf(5000));
+        a = new Product(5,"product5","good", covers[4],3,BigDecimal.valueOf(5000));
         productList.add(a);
 
-        a = new Product("product6","bad", covers[5],1,BigDecimal.valueOf(9000));
+        a = new Product(6,"product6","bad", covers[5],1,BigDecimal.valueOf(9000));
         productList.add(a);
         adapter.notifyDataSetChanged();
     }
