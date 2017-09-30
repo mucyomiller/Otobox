@@ -16,17 +16,17 @@ public class Product implements Saleable, Serializable, Parcelable {
     
     private static final long serialVersionUID = -4073256626483275668L;
     
-    private int pId;
+    private String pId;
     private String name;
     private String quality;
-    private int thumbnail;
+    private String thumbnail;
     private int warranty;
     private BigDecimal price;
 
     public Product() {
     }
 
-    public Product(int pId,String name, String quality, int thumbnail, int warranty, BigDecimal price) {
+    public Product(String pId,String name, String quality, String thumbnail, int warranty, BigDecimal price) {
         this.pId = pId;
         this.name = name;
         this.quality = quality;
@@ -35,9 +35,9 @@ public class Product implements Saleable, Serializable, Parcelable {
         this.price = price;
     }
 
-    public int getpId() {return pId;}
+    public String getpId() {return pId;}
 
-    public void setpId(int pId) {this.pId = pId;}
+    public void setpId(String pId) {this.pId = pId;}
 
     public String getName() {return name;}
 
@@ -51,11 +51,11 @@ public class Product implements Saleable, Serializable, Parcelable {
         this.quality = quality;
     }
 
-    public int getThumbnail() {
+    public String getThumbnail() {
         return thumbnail;
     }
 
-    public void setThumbnail(int thumbnail) {
+    public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
 
@@ -78,7 +78,7 @@ public class Product implements Saleable, Serializable, Parcelable {
     public int hashCode() {
         final int prime = 31;
         int hash = 1;
-        hash = hash* prime + pId;
+        hash = hash* prime + (pId == null?0:pId.hashCode());
         hash = hash * prime + (name == null?0:name.hashCode());
         hash = hash * prime + (price==null?0:price.hashCode());
         hash = hash * prime + (quality == null?0:quality.hashCode());
@@ -100,19 +100,19 @@ public class Product implements Saleable, Serializable, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.pId);
+        dest.writeString(this.pId);
         dest.writeString(this.name);
         dest.writeString(this.quality);
-        dest.writeInt(this.thumbnail);
+        dest.writeString(this.thumbnail);
         dest.writeInt(this.warranty);
         dest.writeSerializable(this.price);
     }
 
     protected Product(Parcel in) {
-        this.pId = in.readInt();
+        this.pId = in.readString();
         this.name = in.readString();
         this.quality = in.readString();
-        this.thumbnail = in.readInt();
+        this.thumbnail = in.readString();
         this.warranty = in.readInt();
         this.price = (BigDecimal) in.readSerializable();
     }

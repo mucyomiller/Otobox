@@ -14,6 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,32 +66,18 @@ public class ThirdPagerFragment extends Fragment {
      * Adding few products
      */
     private void prepareProducts() {
-        int[] covers = new int[]{
-                R.drawable.lighting_icon,
-                R.drawable.fog_light,
-                R.drawable.fog_light,
-                R.drawable.lighting_icon,
-                R.drawable.lighting_icon,
-                R.drawable.fog_light
-        };
-
-        Product a = new Product(1,"product1","good",covers[0],2 , BigDecimal.valueOf(5000));
-        productList.add(a);
-
-        a = new Product(2,"product2","excellent", covers[1],3,BigDecimal.valueOf(1000));
-        productList.add(a);
-
-        a = new Product(3,"product3","good", covers[2],1,BigDecimal.valueOf(2000));
-        productList.add(a);
-
-        a = new Product(4,"product4","good", covers[3],2,BigDecimal.valueOf(4000));
-        productList.add(a);
-        a = new Product(5,"product5","good", covers[4],3,BigDecimal.valueOf(5000));
-        productList.add(a);
-
-        a = new Product(6,"product6","bad", covers[5],1,BigDecimal.valueOf(9000));
-        productList.add(a);
-        adapter.notifyDataSetChanged();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Spare");
+        query.include("model");
+        query.include("category");
+        query.findInBackground((Spare, e) -> {
+            for (ParseObject mSpare: Spare) {
+                if(mSpare.getParseObject("category").get("order").equals("2")){
+                    Product a = new Product(mSpare.getObjectId(),mSpare.get("name").toString(),mSpare.get("quality").toString(),getString(R.string.server_base_url)+mSpare.get("url").toString(),Integer.valueOf(mSpare.get("warranty").toString()),BigDecimal.valueOf(Integer.valueOf(mSpare.get("price").toString())));
+                    productList.add(a);
+                }
+            }
+            adapter.notifyDataSetChanged();
+        });
     }
 
 

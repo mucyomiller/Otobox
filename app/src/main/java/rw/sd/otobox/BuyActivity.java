@@ -79,18 +79,15 @@ public class BuyActivity extends AppCompatActivity {
         //gettimg tabs names
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Category");
         query.orderByAscending("order");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> Category, ParseException e) {
-                Log.d(TAG, "counter: "+Category.size());
-                for (ParseObject mCategory: Category) {
-                    tabnames.add(mCategory.get("name").toString());
-                }
-                tabLayout.getTabAt(0).setText(tabnames.get(0));
-                tabLayout.getTabAt(1).setText(tabnames.get(1));
-                tabLayout.getTabAt(2).setText(tabnames.get(2));
-                tabLayout.getTabAt(3).setText(tabnames.get(3));
+        query.findInBackground((Category, e) -> {
+//                Log.d(TAG, "counter: "+Category.size());
+            for (ParseObject mCategory: Category) {
+                tabnames.add(mCategory.get("name").toString());
             }
+            tabLayout.getTabAt(0).setText(tabnames.get(0));
+            tabLayout.getTabAt(1).setText(tabnames.get(1));
+            tabLayout.getTabAt(2).setText(tabnames.get(2));
+            tabLayout.getTabAt(3).setText(tabnames.get(3));
         });
 
     }

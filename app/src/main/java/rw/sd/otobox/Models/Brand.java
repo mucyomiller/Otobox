@@ -87,4 +87,5 @@ public class Brand implements Parcelable {
             return new Brand[size];
         }
     };
+
 }

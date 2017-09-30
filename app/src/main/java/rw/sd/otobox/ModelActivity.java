@@ -85,19 +85,14 @@ public class ModelActivity extends AppCompatActivity {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Model");
         query.include("parent");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> Model, ParseException e) {
-                for (ParseObject mModel: Model) {
-                    if(mModel.getParseObject("parent").getObjectId().equals(mBrand.getId())){
-//                        Log.d(TAG, " Model =>"+mModel.get("name").toString());
-//                        Log.d(TAG, "Brand  => "+mModel.getParseObject("parent").get("name"));
-                        Model a = new Model(mModel.getObjectId(),mModel.get("name").toString(), getString(R.string.server_base_url)+mModel.get("url").toString());
-                        modelList.add(a);
-                    }
+        query.findInBackground((Model, e) -> {
+            for (ParseObject mModel: Model) {
+                if(mModel.getParseObject("parent").getObjectId().equals(mBrand.getId())){
+                    Model a = new Model(mModel.getObjectId(),mModel.get("name").toString(), getString(R.string.server_base_url)+mModel.get("url").toString());
+                    modelList.add(a);
                 }
-                adapter.notifyDataSetChanged();
             }
+            adapter.notifyDataSetChanged();
         });
     }
 

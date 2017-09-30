@@ -121,46 +121,22 @@ public class MainActivity extends AppCompatActivity {
 
 //        ParseObject Brand = new ParseObject("Brand");
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Brand");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> Brand, ParseException e) {
-                Log.d(TAG, "counter: "+Brand.size());
-                for (ParseObject mBrand: Brand) {
-//                    Log.d(TAG, "BRAND FOUNDED =>"+mBrand.get("name")+" Brand url"+mBrand.get("url"));
-                    //getting model count
-                    //ParseQuery<ParseObject> innerQuery = ParseQuery.getQuery("Brand");
-                    //innerQuery.whereEqualTo("name",mBrand.get("name").toString());
-                    ParseQuery<ParseObject> querye = ParseQuery.getQuery("Model");
-                    querye.include("parent");
-                    querye.whereEqualTo("parent",mBrand);
-//
-//                                        query.whereMatchesQuery("parent",innerQuery);
-                    querye.findInBackground(new FindCallback<ParseObject>() {
-                        @Override
-                        public void done(List<ParseObject> model, ParseException e) {
-                            mCount  =model.size();
-                            Log.d(TAG, "model counter: "+mCount);
-                        }
-                    });
+        query.findInBackground((Brand, e) -> {
+            Log.d(TAG, "counter: "+Brand.size());
+            for (ParseObject mBrand: Brand) {
+                ParseQuery<ParseObject> querye = ParseQuery.getQuery("Model");
+                querye.include("parent");
+                querye.whereEqualTo("parent",mBrand);
+                querye.findInBackground((model, e1) -> {
+                    mCount  =model.size();
+                    Log.d(TAG, "model counter: "+mCount);
+                });
 
-                    Brand a = new Brand(mBrand.getObjectId(),mBrand.get("name").toString(), mCount, getString(R.string.server_base_url)+mBrand.get("url").toString());
-                    brandList.add(a);
-                }
-                adapter.notifyDataSetChanged();
+                Brand a = new Brand(mBrand.getObjectId(),mBrand.get("name").toString(), mCount, getString(R.string.server_base_url)+mBrand.get("url").toString());
+                brandList.add(a);
             }
+            adapter.notifyDataSetChanged();
         });
-
-
-//        query.getInBackground("xWMyZ4YEGZ", new GetCallback<ParseObject>() {
-//            public void done(ParseObject object, ParseException e) {
-//                if (e == null) {
-//                    // object will be your game score
-//                } else {
-//                    // something went wrong
-//                }
-//            }
-//        });
-
     }
 
     /**
