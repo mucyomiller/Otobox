@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private BrandsAdapter adapter;
     private List<Brand> brandList;
-    private int mCount =0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,16 +123,16 @@ public class MainActivity extends AppCompatActivity {
         query.findInBackground((Brand, e) -> {
             Log.d(TAG, "counter: "+Brand.size());
             for (ParseObject mBrand: Brand) {
-                ParseQuery<ParseObject> querye = ParseQuery.getQuery("Model");
-                querye.include("parent");
-                querye.whereEqualTo("parent",mBrand);
-                querye.findInBackground((model, e1) -> {
-                    mCount  =model.size();
-                    Log.d(TAG, "model counter: "+mCount);
-                });
-
-                Brand a = new Brand(mBrand.getObjectId(),mBrand.get("name").toString(), mCount, getString(R.string.server_base_url)+mBrand.get("url").toString());
-                brandList.add(a);
+                ParseQuery<ParseObject> query1 = ParseQuery.getQuery("Model");
+                query1.include("parent");
+                query1.whereEqualTo("parent",mBrand);
+                try {
+//                    Log.d(TAG, "counted: "+query1.count());
+                    Brand a = new Brand(mBrand.getObjectId(),mBrand.get("name").toString(),query1.count() , getString(R.string.server_base_url)+mBrand.get("url").toString());
+                    brandList.add(a);
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
             }
             adapter.notifyDataSetChanged();
         });
