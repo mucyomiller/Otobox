@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.shawnlin.numberpicker.NumberPicker;
 
 import java.util.Calendar;
@@ -34,6 +35,7 @@ public class YearActivity extends AppCompatActivity {
     NumberPicker numberPicker;
     TextView  year_cover_text;
     FancyButton mGoButton;
+    ImageView yearCoverImg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,7 @@ public class YearActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         year_cover_text = (TextView) findViewById(R.id.year_cover_text);
+        yearCoverImg = (ImageView) findViewById(R.id.year_cover_image);
         mGoButton = (FancyButton) findViewById(R.id.btn_go);
         int CURRENT_YEAR = Calendar.getInstance().get(Calendar.YEAR);
         numberPicker = (NumberPicker) findViewById(R.id.number_picker);
@@ -48,7 +51,9 @@ public class YearActivity extends AppCompatActivity {
         numberPicker.setMinValue(CURRENT_YEAR - 50);
         Brand mBrand = getIntent().getParcelableExtra("Brand");
         Model mModel = getIntent().getParcelableExtra("Model");
-        year_cover_text.setText(mBrand.getName() +" MODEL YEAR");
+        // loading year cover image using Glide library
+        Glide.with(getApplicationContext()).load(mModel.getThumbnail()).into(yearCoverImg);
+        year_cover_text.setText(mModel.getName() +" YEAR");
             mGoButton.setOnClickListener(v -> {
                 Intent mIntent = new Intent(v.getContext(),BuyActivity.class);
                 mIntent.putExtra("Brand",mBrand);

@@ -39,7 +39,6 @@
             android:id="@+id/brand_logo"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
-            android:src="@drawable/car19"
             android:layout_weight="1"
             android:scaleType="centerInside"
             />
