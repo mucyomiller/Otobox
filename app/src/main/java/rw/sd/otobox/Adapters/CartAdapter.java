@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -73,10 +74,25 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         return itemList.size();
     }
 
+    public void removeItem(int position) {
+        itemList.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(CartItem item, int position) {
+        itemList.add(position, item);
+        // notify item added by position
+        notifyItemInserted(position);
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView cartItemName,cartItemUnitPrice,cartItemPrice,cartItemQuantity;
         public ImageView thumbnail;
         public SeekBar mSeekBar;
+        public RelativeLayout viewBackground, viewForeground;
         public MyViewHolder(View itemView) {
             super(itemView);
             cartItemName = (TextView) itemView.findViewById(R.id.cartItemName);
@@ -85,6 +101,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
             cartItemQuantity = (TextView) itemView.findViewById(R.id.cartItemQuantity);
             thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
             mSeekBar = (SeekBar) itemView.findViewById(R.id.seekBar);
+            viewBackground = (RelativeLayout) itemView.findViewById(R.id.view_background);
+            viewForeground = (RelativeLayout) itemView.findViewById(R.id.view_foreground);
 
         }
     }

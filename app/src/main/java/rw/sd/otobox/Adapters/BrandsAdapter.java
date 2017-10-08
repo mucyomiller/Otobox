@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.elyeproj.loaderviewlibrary.LoaderImageView;
+import com.elyeproj.loaderviewlibrary.LoaderTextView;
 
 import java.util.List;
 
@@ -27,16 +29,17 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyViewHold
     private List<Brand> brandList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count;
-        public ImageView thumbnail;
+        public LoaderTextView title;
+        public LoaderImageView thumbnail;
         public View mHolder;
 
         public MyViewHolder(View view) {
             super(view);
             mHolder = view;
-            title = (TextView) view.findViewById(R.id.title);
-            count = (TextView) view.findViewById(R.id.count);
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            title = (LoaderTextView) view.findViewById(R.id.title);
+            title.resetLoader();
+            thumbnail = (LoaderImageView) view.findViewById(R.id.thumbnail);
+            thumbnail.resetLoader();
         }
     }
 
@@ -56,22 +59,24 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        final Brand brand = brandList.get(position);
-        holder.title.setText(brand.getName());
-        holder.count.setText(brand.getNumOfModels() + " models");
+      if(brandList.size()>0)
+      {
+          final Brand brand = brandList.get(position);
+          holder.title.setText(brand.getName());
+//      loading brand cover using Glide library
+          Glide.with(mContext).load(brand.getThumbnail()).into(holder.thumbnail);
 
-        // loading brand cover using Glide library
-        Glide.with(mContext).load(brand.getThumbnail()).into(holder.thumbnail);
-
-        holder.mHolder.setOnClickListener(v -> {
-            Intent mIntent = new Intent(v.getContext(),ModelActivity.class);
-            mIntent.putExtra("Brand",brand);
-            v.getContext().startActivity(mIntent);
-        });
+          holder.mHolder.setOnClickListener(v -> {
+              Intent mIntent = new Intent(v.getContext(),ModelActivity.class);
+              mIntent.putExtra("Brand",brand);
+              v.getContext().startActivity(mIntent);
+          });
+//          notifyItemChanged(position);
+      }
     }
 
     @Override
     public int getItemCount() {
-        return brandList.size();
+        return brandList.size()>0?brandList.size():8;
     }
 }

@@ -3,12 +3,14 @@ package rw.sd.otobox;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,25 +37,49 @@ public class BuyActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
-    private TextView model_title,brand_title;
+    private TextView model_title,model_title_upper,brand_title;
     private ImageView brand_logo;
     private ArrayList<String> tabnames;
+    private Bundle bundle;
+    private SwitchCompat switch_filter;
+    public  static boolean filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy);
         model_title = (TextView) findViewById(R.id.model_title);
+        model_title_upper = (TextView) findViewById(R.id.model_title_upper);
         brand_title = (TextView) findViewById(R.id.brand_title);
         brand_logo = (ImageView) findViewById(R.id.brand_logo);
+        switch_filter = (SwitchCompat) findViewById(R.id.switch_filter);
+        switch_filter.setOnClickListener(v -> {
+            //Is the switch is on?
+            boolean on = ((SwitchCompat) v).isChecked();
+            if(on)
+            {
+                //Do something when switch is on/checked
+                filter = true;
+            }
+            else
+            {
+                //Do something when switch is off/unchecked
+                filter = false;
+            }
+        });
         Model model = getIntent().getParcelableExtra("Model");
         Brand brand = getIntent().getParcelableExtra("Brand");
         tabnames = new ArrayList<>();
+        bundle = new Bundle();
+        bundle.putParcelable("model",model);
+        bundle.putBoolean("filter",filter);
 
         brand_title.setText(brand.getName());
         model_title.setText(model.getName());
+        model_title_upper.setText(model.getName());
         // loading brand logo using Glide library
         Glide.with(getApplicationContext()).load(brand.getThumbnail()).into(brand_logo);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -65,10 +91,18 @@ public class BuyActivity extends AppCompatActivity {
 
     private void setupViewPager(){
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mSectionsPagerAdapter.addFragemnt(new FirstPagerFragment());
-        mSectionsPagerAdapter.addFragemnt(new SecondPagerFragment());
-        mSectionsPagerAdapter.addFragemnt(new ThirdPagerFragment());
-        mSectionsPagerAdapter.addFragemnt(new FourthPagerFragment());
+        FirstPagerFragment mFirstPagerFragment = new FirstPagerFragment();
+        mFirstPagerFragment.setArguments(bundle);
+        mSectionsPagerAdapter.addFragemnt(mFirstPagerFragment);
+        SecondPagerFragment mSecondPagerFragment = new SecondPagerFragment();
+        mSecondPagerFragment.setArguments(bundle);
+        mSectionsPagerAdapter.addFragemnt(mSecondPagerFragment);
+        ThirdPagerFragment mThirdPagerFragment = new ThirdPagerFragment();
+        mThirdPagerFragment.setArguments(bundle);
+        mSectionsPagerAdapter.addFragemnt(mThirdPagerFragment);
+        FourthPagerFragment mFourthPagerFragment = new FourthPagerFragment();
+        mFourthPagerFragment.setArguments(bundle);
+        mSectionsPagerAdapter.addFragemnt(mFourthPagerFragment);
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);

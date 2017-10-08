@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.elyeproj.loaderviewlibrary.LoaderTextView;
 
 import java.util.List;
 
@@ -31,15 +32,16 @@ public class ModelsAdapter extends RecyclerView.Adapter<ModelsAdapter.MyViewHold
     private Brand mBrand;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title;
-        public ImageView thumbnail;
+        public LoaderTextView title;
+//      public ImageView thumbnail;
         public View mHolder;
 
         public MyViewHolder(View view) {
             super(view);
             mHolder = view;
-            title = (TextView) view.findViewById(R.id.title_model);
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail_model);
+            title = (LoaderTextView) view.findViewById(R.id.title_model);
+            title.resetLoader();
+//            thumbnail = (ImageView) view.findViewById(R.id.thumbnail_model);
         }
     }
 
@@ -53,30 +55,29 @@ public class ModelsAdapter extends RecyclerView.Adapter<ModelsAdapter.MyViewHold
     @Override
     public ModelsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.model_card, parent, false);
-
+                .inflate(R.layout.model_card_v2, parent, false);
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(final ModelsAdapter.MyViewHolder holder, int position) {
+    if(modelList.size()>0){
         final Model model = modelList.get(position);
         holder.title.setText(model.getName());
-
         // loading brand cover using Glide library
-        Glide.with(mContext).load(model.getThumbnail()).into(holder.thumbnail);
-
+        //  Glide.with(mContext).load(model.getThumbnail()).into(holder.thumbnail);
         holder.mHolder.setOnClickListener(v -> {
             Intent mIntent = new Intent(v.getContext(), YearActivity.class);
             mIntent.putExtra("Model",model);
             mIntent.putExtra("Brand",mBrand);
             v.getContext().startActivity(mIntent);
-//            Toast.makeText(mContext, "Not Available Now", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext, "Not Available Now", Toast.LENGTH_SHORT).show();
         });
+    }
     }
 
     @Override
     public int getItemCount() {
-        return modelList.size();
+        return modelList.size()>0?modelList.size():5;
     }
 }

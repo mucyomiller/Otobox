@@ -89,11 +89,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
         // loading brand cover using Glide library
         Glide.with(mContext).load(product.getThumbnail()).into(holder.thumbnail);
 
-        holder.mHolder.setOnClickListener(v -> {
-//            Intent mIntent = new Intent(v.getContext(), BuyActivity.class);
-//            v.getContext().startActivity(mIntent);
-            Toast.makeText(mContext, "Clicked All", Toast.LENGTH_SHORT).show();
-        });
+//        holder.mHolder.setOnClickListener(v -> {
+//           Intent mIntent = new Intent(v.getContext(), BuyActivity.class);
+//           v.getContext().startActivity(mIntent);
+//            Toast.makeText(mContext, "Clicked All", Toast.LENGTH_SHORT).show();
+//        });
     }
 
     @Override

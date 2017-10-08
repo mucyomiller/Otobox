@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rw.sd.otobox.Adapters.ProductsAdapter;
+import rw.sd.otobox.Models.Model;
 import rw.sd.otobox.Models.Product;
 import rw.sd.otobox.R;
 
@@ -33,11 +35,19 @@ public class FourthPagerFragment extends Fragment {
     private ProductsAdapter adapter;
     private List<Product> productList;
     private Context mContext;
+    private Model model;
 
     public FourthPagerFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            model = getArguments().getParcelable("model");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,7 +80,7 @@ public class FourthPagerFragment extends Fragment {
         query.include("category");
         query.findInBackground((Spare, e) -> {
             for (ParseObject mSpare: Spare) {
-                if(mSpare.getParseObject("category").get("order").equals("3")){
+                if(mSpare.getParseObject("category").get("order").equals("3") && mSpare.getParseObject("model").get("name").toString().equals(model.getName())){
                     Product a = new Product(mSpare.getObjectId(),mSpare.get("name").toString(),mSpare.get("quality").toString(),getString(R.string.server_base_url)+mSpare.get("url").toString(),Integer.valueOf(mSpare.get("warranty").toString()),BigDecimal.valueOf(Integer.valueOf(mSpare.get("price").toString())));
                     productList.add(a);
                 }

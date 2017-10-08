@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -35,7 +36,7 @@ public class ModelActivity extends AppCompatActivity {
     private static final String TAG = "ModelActivity";
     private RecyclerView recyclerViewModel;
     private ImageView  brand_logo;
-    private TextView brand_title;
+    private TextView brand_title,modelscount;
     private ModelsAdapter adapter;
     private List<Model> modelList;
     private Context mContext;
@@ -54,6 +55,7 @@ public class ModelActivity extends AppCompatActivity {
         recyclerViewModel = (RecyclerView) findViewById(R.id.recycler_view_model);
         brand_logo = (ImageView) findViewById(R.id.brand_logo);
         brand_title = (TextView) findViewById(R.id.brand_title);
+        modelscount     = (TextView) findViewById(R.id.models_count);
 
         mBrand = getIntent().getParcelableExtra("Brand");
         brand_title.setText(mBrand.getName());
@@ -63,14 +65,14 @@ public class ModelActivity extends AppCompatActivity {
         modelList = new ArrayList<>();
         adapter = new ModelsAdapter(this, modelList,mBrand);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+//        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerViewModel.setLayoutManager(mLayoutManager);
-        recyclerViewModel.addItemDecoration(new ModelActivity.GridSpacingItemDecoration(2, dpToPx(5), true));
+//        recyclerViewModel.addItemDecoration(new ModelActivity.GridSpacingItemDecoration(2, dpToPx(5), true));
         recyclerViewModel.setItemAnimator(new DefaultItemAnimator());
         recyclerViewModel.setAdapter(adapter);
 
         prepareModels();
-
         try {
             Glide.with(this).load(R.drawable.cover).into((ImageView) findViewById(R.id.backdrop));
         } catch (Exception e) {
@@ -92,6 +94,7 @@ public class ModelActivity extends AppCompatActivity {
                     modelList.add(a);
                 }
             }
+            modelscount.setText(modelList.size()+" models");
             adapter.notifyDataSetChanged();
         });
     }

@@ -56,10 +56,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         initCollapsingToolbar();
-        
-        runOnUiThread(()->{
-            Log.d(TAG, "onCreate: ok");
-        });
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -71,9 +67,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-
         prepareBrands();
-
         try {
             Glide.with(this).load(R.drawable.cover).into((ImageView) findViewById(R.id.backdrop));
         } catch (Exception e) {
@@ -123,18 +117,21 @@ public class MainActivity extends AppCompatActivity {
         query.findInBackground((Brand, e) -> {
             Log.d(TAG, "counter: "+Brand.size());
             for (ParseObject mBrand: Brand) {
-                ParseQuery<ParseObject> query1 = ParseQuery.getQuery("Model");
-                query1.include("parent");
-                query1.whereEqualTo("parent",mBrand);
-                try {
-//                    Log.d(TAG, "counted: "+query1.count());
-                    Brand a = new Brand(mBrand.getObjectId(),mBrand.get("name").toString(),query1.count() , getString(R.string.server_base_url)+mBrand.get("url").toString());
-                    brandList.add(a);
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
+//                ParseQuery<ParseObject> query1 = ParseQuery.getQuery("Model");
+//                query1.include("parent");
+//                query1.whereEqualTo("parent",mBrand);
+//                try {
+////                    Log.d(TAG, "counted: "+query1.count());
+//                    Brand a = new Brand(mBrand.getObjectId(),mBrand.get("name").toString(),query1.count() , getString(R.string.server_base_url)+mBrand.get("url").toString());
+//                    brandList.add(a);
+//                } catch (ParseException e1) {
+//                    e1.printStackTrace();
+//                }
+                Brand a = new Brand(mBrand.getObjectId(),mBrand.get("name").toString(),1 , getString(R.string.server_base_url)+mBrand.get("url").toString());
+                brandList.add(a);
             }
-            adapter.notifyDataSetChanged();
+
+            adapter.notifyItemRangeChanged(0,brandList.size());
         });
     }
 
