@@ -54,7 +54,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         holder.mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.d(TAG, "onProgressChanged: "+progress);
+//                Log.d(TAG, "onProgressChanged: "+progress);
+                cart.add(mCartItem.getProduct(),progress);
+                notifyItemChanged(position);
             }
 
             @Override

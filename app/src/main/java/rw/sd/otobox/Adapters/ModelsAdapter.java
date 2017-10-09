@@ -78,6 +78,6 @@ public class ModelsAdapter extends RecyclerView.Adapter<ModelsAdapter.MyViewHold
 
     @Override
     public int getItemCount() {
-        return modelList.size()>0?modelList.size():5;
+        return modelList.size()>0?modelList.size():8;
     }
 }

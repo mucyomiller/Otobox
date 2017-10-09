@@ -40,6 +40,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
     private Button mCheckout;
     private TextView mTotalPrice;
     private RelativeLayout main_content;
+    private  Cart cart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +49,17 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Cart");
-        final Cart cart = CartHelper.getCart();
+        cart = CartHelper.getCart();
         Log.d(TAG, "onCreate: "+cart.getTotalPrice());
         main_content = (RelativeLayout) findViewById(R.id.main_content);
         mTotalPrice = (TextView) findViewById(R.id.total_price);
         mTotalPrice.setText(cart.getTotalPrice().toString());
         mCheckout  = (Button) findViewById(R.id.checkout);
         mCheckout.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("cart",cart);
             Intent mIntent = new Intent(getApplicationContext(),OrderActivity.class);
+            mIntent.putExtras(bundle);
             startActivity(mIntent);
         });
 
@@ -73,27 +77,26 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
         // add pass ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT as param
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
-
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback1 = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                // Row is swiped from recycler view
-                // remove it from adapter
-            }
-
-            @Override
-            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-            }
-        };
-
-        // attaching the touch helper to recycler view
-        new ItemTouchHelper(itemTouchHelperCallback1).attachToRecyclerView(recyclerView);
+//
+//        ItemTouchHelper.SimpleCallback itemTouchHelperCallback1 = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP) {
+//            @Override
+//            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+//                // Row is swiped from recycler view
+//                // remove it from adapter
+//            }
+//
+//            @Override
+//            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+//                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+//            }
+//        };
+//        // attaching the touch helper to recycler view
+//        new ItemTouchHelper(itemTouchHelperCallback1).attachToRecyclerView(recyclerView);
 
 
     }
@@ -116,7 +119,9 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
 
             // remove the item from recycler view
             adapter.removeItem(viewHolder.getAdapterPosition());
-
+            // remove it also from cart
+            cart.remove(deletedItem.getProduct());
+            mTotalPrice.setText(cart.getTotalPrice().toString());
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
                     .make(main_content, name + " removed from cart!", Snackbar.LENGTH_LONG);
@@ -126,6 +131,8 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
 
                     // undo is selected, restore the deleted item
                     adapter.restoreItem(deletedItem, deletedIndex);
+                    cart.add(deletedItem.getProduct(),deletedItem.getQuantity());
+                    mTotalPrice.setText(cart.getTotalPrice().toString());
                 }
             });
             snackbar.setActionTextColor(Color.YELLOW);

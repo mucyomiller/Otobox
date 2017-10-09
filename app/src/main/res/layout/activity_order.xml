@@ -52,9 +52,29 @@
             android:orientation="vertical"
             android:layout_weight="1">
             <TextView
-                android:id="@+id/brand_title"
-                android:text="Audi"
+                android:id="@+id/totalprice"
+                android:layout_marginTop="5dp"
                 android:gravity="center"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                />
+
+            <TextView
+                android:id="@+id/vat"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                />
+            <TextView
+                android:id="@+id/totalitems"
+                android:gravity="center"
+                android:textSize="16sp"
                 android:textAllCaps="false"
                 android:textStyle="bold"
                 android:layout_height="wrap_content"
@@ -86,10 +106,12 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
         <TextView
+            android:layout_marginTop="15dp"
             android:text="Amazina"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"/>
@@ -98,7 +120,7 @@
             android:padding="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/rectangular"/>
 
         <TextView
@@ -111,7 +133,7 @@
             android:padding="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/rectangular"/>
         <TextView
             android:text="Aho muherereye"
