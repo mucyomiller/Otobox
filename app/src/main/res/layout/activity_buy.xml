@@ -91,26 +91,10 @@
                 />
         </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/model_title_view"
-        android:layout_below="@+id/model_header"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/model_title"
-            android:text="A4"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:textAllCaps="true"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent" />
-    </LinearLayout>
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
         app:tabSelectedTextColor="@color/colorPrimary"
-        android:layout_below="@+id/model_title_view"
+        android:layout_below="@+id/model_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

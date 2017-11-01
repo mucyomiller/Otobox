@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
@@ -115,8 +116,10 @@ public class MainActivity extends AppCompatActivity {
 //        ParseObject Brand = new ParseObject("Brand");
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Brand");
         query.findInBackground((Brand, e) -> {
-            Log.d(TAG, "counter: "+Brand.size());
-            for (ParseObject mBrand: Brand) {
+            if(e == null)
+            {
+                Log.d(TAG, "counter: "+Brand.size());
+                for (ParseObject mBrand: Brand) {
 //                ParseQuery<ParseObject> query1 = ParseQuery.getQuery("Model");
 //                query1.include("parent");
 //                query1.whereEqualTo("parent",mBrand);
@@ -127,11 +130,16 @@ public class MainActivity extends AppCompatActivity {
 //                } catch (ParseException e1) {
 //                    e1.printStackTrace();
 //                }
-                Brand a = new Brand(mBrand.getObjectId(),mBrand.get("name").toString(),1 , getString(R.string.server_base_url)+mBrand.get("url").toString());
-                brandList.add(a);
-            }
+                    Brand a = new Brand(mBrand.getObjectId(),mBrand.get("name").toString(),1 , getString(R.string.server_base_url)+mBrand.get("url").toString());
+                    brandList.add(a);
+                }
 
-            adapter.notifyItemRangeChanged(0,brandList.size());
+                adapter.notifyItemRangeChanged(0,brandList.size());
+            }
+            else{
+                Toast.makeText(getApplicationContext(),"NETWORK ERROR!",Toast.LENGTH_LONG).show();
+                Log.d(TAG, "prepareBrands: error"+ e.getMessage());
+            }
         });
     }
 

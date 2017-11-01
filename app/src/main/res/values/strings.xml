@@ -3,6 +3,8 @@
     <string name="action_settings">Settings</string>
     <string name="parse_server_url">http://165.227.219.239:1337/parse/</string>
     <string name="server_base_url">http://165.227.219.239:1337/</string>
+    <!--<string name="parse_server_url">http://192.168.43.163:1337/parse/</string>-->
+    <!--<string name="server_base_url">http://192.168.43.163:1337/</string>-->
     <string name="parse_app_id">LND78fpKYYoZOVSQE0m22Ws6bAV8OZxbT1W8UXPy</string>
 
 
