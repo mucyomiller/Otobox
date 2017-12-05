@@ -10,15 +10,13 @@ import android.os.Parcelable;
 public class Model implements Parcelable {
     private String id;
     private String name;
-    private String thumbnail;
 
     public Model() {
     }
 
-    public Model(String id, String name, String thumbnail) {
+    public Model(String id, String name) {
         this.id = id;
         this.name = name;
-        this.thumbnail = thumbnail;
     }
 
     public String getId() {
@@ -37,13 +35,6 @@ public class Model implements Parcelable {
         this.name = name;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
 
     @Override
     public int describeContents() {
@@ -54,13 +45,11 @@ public class Model implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.name);
-        dest.writeString(this.thumbnail);
     }
 
     protected Model(Parcel in) {
         this.id = in.readString();
         this.name = in.readString();
-        this.thumbnail = in.readString();
     }
 
     public static final Parcelable.Creator<Model> CREATOR = new Parcelable.Creator<Model>() {
