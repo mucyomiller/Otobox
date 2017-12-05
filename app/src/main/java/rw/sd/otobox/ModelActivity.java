@@ -86,13 +86,11 @@ public class ModelActivity extends AppCompatActivity {
     private void prepareModels() {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Model");
-        query.include("parent");
+        query.whereEqualTo("parent",mBrand);
         query.findInBackground((Model, e) -> {
             for (ParseObject mModel: Model) {
-                if(mModel.getParseObject("parent").getObjectId().equals(mBrand.getId())){
-                    Model a = new Model(mModel.getObjectId(),mModel.get("name").toString(), getString(R.string.server_base_url)+mModel.get("url").toString());
+                    Model a = new Model(mModel.getObjectId(),mModel.get("name").toString());
                     modelList.add(a);
-                }
             }
             modelscount.setText(modelList.size()+" models");
             adapter.notifyDataSetChanged();
