@@ -75,10 +75,9 @@ public class BuyActivity extends AppCompatActivity {
         bundle.putBoolean("filter",filter);
 
         brand_title.setText(brand.getName());
-        model_title.setText(model.getName());
         model_title_upper.setText(model.getName());
         // loading brand logo using Glide library
-        Glide.with(getApplicationContext()).load(brand.getThumbnail()).into(brand_logo);
+        Glide.with(getApplicationContext()).load(model.getThumbnail()).into(brand_logo);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -106,6 +105,7 @@ public class BuyActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(4);
 
         //
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);

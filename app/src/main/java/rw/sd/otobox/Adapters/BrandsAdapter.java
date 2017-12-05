@@ -75,8 +75,13 @@ public class BrandsAdapter extends RecyclerView.Adapter<BrandsAdapter.MyViewHold
       }
     }
 
+//    @Override
+//    public int getItemCount() {
+//        return brandList.size()>0?brandList.size():8;
+//    }
+
     @Override
     public int getItemCount() {
-        return brandList.size()>0?brandList.size():8;
+        return brandList.size();
     }
 }
