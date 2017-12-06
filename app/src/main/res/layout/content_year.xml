@@ -30,7 +30,7 @@
             android:textSize="26sp"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:text="testing" />
+            android:text="Generations" />
 
     </FrameLayout>
     <com.shawnlin.numberpicker.NumberPicker

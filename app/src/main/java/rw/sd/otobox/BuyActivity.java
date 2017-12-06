@@ -77,7 +77,7 @@ public class BuyActivity extends AppCompatActivity {
         brand_title.setText(brand.getName());
         model_title_upper.setText(model.getName());
         // loading brand logo using Glide library
-        Glide.with(getApplicationContext()).load(model.getThumbnail()).into(brand_logo);
+        Glide.with(getApplicationContext()).load(brand.getThumbnail()).into(brand_logo);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

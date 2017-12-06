@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
@@ -84,16 +85,25 @@ public class ModelActivity extends AppCompatActivity {
      * Adding few brands
      */
     private void prepareModels() {
-
+        //create Brand parse object from Brand Model class
+        ParseObject myBrand = ParseObject.createWithoutData("Brand",mBrand.getId());
+        // parse query for getting models belongs to current Brand
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Model");
-        query.whereEqualTo("parent",mBrand);
+        query.whereEqualTo("parent",myBrand);
         query.findInBackground((Model, e) -> {
-            for (ParseObject mModel: Model) {
+            if(e == null){
+                for (ParseObject mModel: Model) {
                     Model a = new Model(mModel.getObjectId(),mModel.get("name").toString());
                     modelList.add(a);
+                }
+                modelscount.setText(modelList.size()+" models");
+                adapter.notifyDataSetChanged();
             }
-            modelscount.setText(modelList.size()+" models");
-            adapter.notifyDataSetChanged();
+            else
+            {
+                Toast.makeText(getApplicationContext(),"error occured!",Toast.LENGTH_LONG).show();
+                Log.e(TAG, "error => "+ e.getMessage());
+            }
         });
     }
 

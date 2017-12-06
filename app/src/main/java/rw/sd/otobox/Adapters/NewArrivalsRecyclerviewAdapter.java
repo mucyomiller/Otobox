@@ -69,7 +69,6 @@ public class NewArrivalsRecyclerviewAdapter extends RecyclerView.Adapter<NewArri
                     Model mModel = new Model();
                     mModel.setId(object.getObjectId());
                     mModel.setName(object.get("name").toString());
-                    mModel.setThumbnail(v.getResources().getString(R.string.server_base_url)+object.get("url").toString());
                     ParseObject pObject = object.getParseObject("parent");
                     Brand mBrand = new Brand();
                     mBrand.setId(pObject.getObjectId());
