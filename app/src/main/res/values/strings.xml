@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Otobox</string>
     <string name="action_settings">Settings</string>
-    <!--<string name="parse_server_url">http://165.227.219.239:1337/parse/</string>-->
-    <!--<string name="server_base_url">http://165.227.219.239:1337/</string>-->
-    <string name="parse_server_url">http://192.168.8.100:1337/parse/</string>
-    <string name="server_base_url">http://192.168.8.100:1337/</string>
+    <string name="parse_server_url">http://165.227.219.239:1337/parse/</string>
+    <string name="server_base_url">http://165.227.219.239:1337/</string>
+    <!--<string name="parse_server_url">http://192.168.8.100:1337/parse/</string>-->
+    <!--<string name="server_base_url">http://192.168.8.100:1337/</string>-->
     <string name="parse_app_id">LND78fpKYYoZOVSQE0m22Ws6bAV8OZxbT1W8UXPy</string>
 
     <string name="backdrop_title">OtoBox</string>
@@ -21,10 +21,12 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="action_cart">Cart</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="quality_label">Quality</string>
+    <string name="quality_label">Condition</string>
     <string name="title_activity_year">Generations</string>
     <string name="old_vs_new">Old vs New</string>
-    <string name="choose_new_old">choose new/old</string>
+    <string name="choose_new_old">filter new/all/old</string>
     <string name="delete">DELETE</string>
+    <string name="title_activity_product_detail">Detail</string>
+    <string name="quality">Quality</string>
 
 </resources>

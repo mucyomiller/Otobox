@@ -3,20 +3,26 @@ package rw.sd.otobox.Adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.mucyomiller.shoppingcart.exception.ProductNotFoundException;
+import com.mucyomiller.shoppingcart.exception.QuantityOutOfRangeException;
 import com.mucyomiller.shoppingcart.model.Cart;
 import com.mucyomiller.shoppingcart.util.CartHelper;
 
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import rw.sd.otobox.CartActivity;
 import rw.sd.otobox.Models.CartItem;
 import rw.sd.otobox.R;
@@ -43,32 +49,34 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Cart cart = CartHelper.getCart();
-        CartItem mCartItem = itemList.get(position);
-        holder.cartItemName.setText(mCartItem.getProduct().getName());
-        holder.cartItemUnitPrice.setText(mCartItem.getProduct().getPrice().toString());
-        holder.cartItemPrice.setText(cart.getCost(mCartItem.getProduct()).toString());
-        holder.cartItemQuantity.setText(String.valueOf(mCartItem.getQuantity()));
-        // loading brand cover using Glide library
-        Glide.with(mContext).load(mCartItem.getProduct().getThumbnail()).into(holder.thumbnail);
-        holder.mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                Log.d(TAG, "onProgressChanged: "+progress);
-                cart.add(mCartItem.getProduct(),progress);
+
+        try {
+            Cart cart = CartHelper.getCart();
+            CartItem mCartItem = itemList.get(position);
+            holder.cartItemName.setText(mCartItem.getProduct().getName());
+            holder.cartItemUnitPrice.setText(mCartItem.getProduct().getPrice().toString());
+            holder.cartItemPrice.setText(cart.getCost(mCartItem.getProduct()).toString());
+            holder.cartItemQuantity.setText(String.valueOf(cart.getQuantity(mCartItem.getProduct())));
+            holder.itemQuantity.setText(String.valueOf(cart.getQuantity(mCartItem.getProduct())));
+            holder.btnAdd.setOnClickListener(v -> {
+                cart.add(mCartItem.getProduct(), 1);
                 notifyItemChanged(position);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+            });
+            holder.btnMinus.setOnClickListener(v -> {
+                try {
+                    cart.remove(mCartItem.getProduct(), 1);
+                } catch (QuantityOutOfRangeException e) {
+                    Toasty.error(v.getContext(), e.getMessage(), Toast.LENGTH_SHORT, true).show();
+                } catch (ProductNotFoundException e) {
+                    Toasty.error(v.getContext(), e.getMessage(), Toast.LENGTH_SHORT, true).show();
+                }
+                notifyItemChanged(position);
+            });
+            // loading brand cover using Glide library
+            Glide.with(mContext).load(mCartItem.getProduct().getThumbnail()).into(holder.thumbnail);
+        }catch (ProductNotFoundException e){
+            Toasty.error(mContext,e.getMessage(),Toast.LENGTH_SHORT,true).show();
+        }
     }
 
     @Override
@@ -91,18 +99,20 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView cartItemName,cartItemUnitPrice,cartItemPrice,cartItemQuantity;
+        public TextView cartItemName,cartItemUnitPrice,cartItemPrice,cartItemQuantity,itemQuantity;
         public ImageView thumbnail;
-        public SeekBar mSeekBar;
         public RelativeLayout viewBackground, viewForeground;
+        public Button btnMinus,btnAdd;
         public MyViewHolder(View itemView) {
             super(itemView);
             cartItemName = (TextView) itemView.findViewById(R.id.cartItemName);
             cartItemUnitPrice = (TextView) itemView.findViewById(R.id.cartItemUnitPrice);
             cartItemPrice = (TextView) itemView.findViewById(R.id.cartItemPrice);
             cartItemQuantity = (TextView) itemView.findViewById(R.id.cartItemQuantity);
+            itemQuantity = (TextView) itemView.findViewById(R.id.itemQuantity);
+            btnAdd       = (Button) itemView.findViewById(R.id.qtyadd);
+            btnMinus       = (Button) itemView.findViewById(R.id.qtyminus);
             thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
-            mSeekBar = (SeekBar) itemView.findViewById(R.id.seekBar);
             viewBackground = (RelativeLayout) itemView.findViewById(R.id.view_background);
             viewForeground = (RelativeLayout) itemView.findViewById(R.id.view_foreground);
 

@@ -9,7 +9,7 @@
     <dimen name="backdrop_subtitle">18dp</dimen>
     <dimen name="card_margin">5dp</dimen>
     <dimen name="card_brand_radius">0dp</dimen>
-    <dimen name="brand_cover_height">100dp</dimen>
+    <dimen name="brand_cover_height">80dp</dimen>
     <dimen name="brand_title_padding">10dp</dimen>
     <dimen name="brand_title">15dp</dimen>
     <dimen name="models_count_padding_bottom">5dp</dimen>

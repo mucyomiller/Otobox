@@ -7,5 +7,6 @@
         android:orderInCategory="100"
         android:icon="@drawable/icon_cart"
         android:title="@string/action_cart"
+        app:actionLayout="@layout/badge_counter"
         app:showAsAction="always" />
 </menu>

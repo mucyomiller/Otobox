@@ -19,6 +19,7 @@ import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 
+import es.dmoral.toasty.Toasty;
 import rw.sd.otobox.Models.Brand;
 import rw.sd.otobox.Models.Model;
 import rw.sd.otobox.Models.SectionDataModel;
@@ -81,7 +82,7 @@ public class NewArrivalsRecyclerviewAdapter extends RecyclerView.Adapter<NewArri
                     v.getContext().startActivity(mIntent);
                 }
                 else{
-                    Toast.makeText(v.getContext(),"NETWORK ERROR!",Toast.LENGTH_LONG).show();
+                    Toasty.error(v.getContext(),e.getMessage(),Toast.LENGTH_SHORT,true).show();
                     Log.d(TAG, "LoadData: error"+ e.getMessage());
                 }
             });

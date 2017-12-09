@@ -14,6 +14,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import rw.sd.otobox.Adapters.BrandsAdapter;
 import rw.sd.otobox.Adapters.ProductsAdapter;
 import rw.sd.otobox.Adapters.SectionsPagerAdapter;
@@ -95,7 +97,7 @@ public class BrandsFragment extends Fragment {
                 adapter.notifyItemRangeChanged(0,brandList.size());
             }
             else{
-                Toast.makeText(getContext(),"NETWORK ERROR!",Toast.LENGTH_LONG).show();
+                Toasty.error(getContext(),"Network Error!",Toast.LENGTH_LONG,true).show();
                 Log.d(TAG, "prepareBrands: error"+ e.getMessage());
             }
         });

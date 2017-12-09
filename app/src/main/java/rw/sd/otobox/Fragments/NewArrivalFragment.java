@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import rw.sd.otobox.Adapters.NewArrivalsRecyclerviewAdapter;
 import rw.sd.otobox.Models.Product;
 import rw.sd.otobox.Models.SectionDataModel;
@@ -93,20 +94,22 @@ public class NewArrivalFragment extends Fragment {
                                 Product a = new Product(mSpare.getObjectId(), mSpare.get("name").toString(), mSpare.get("quality").toString(), NewArrivalFragment.this.getString(R.string.server_base_url) + mSpare.get("url").toString(), Integer.valueOf(mSpare.get("warranty").toString()), BigDecimal.valueOf(Integer.valueOf(mSpare.get("price").toString())));
                                 mProductRow.add(a);
                             }
-                            mSectionDataModel.setAllItemsInSection(mProductRow);
-                            allData.add(mSectionDataModel);
-                            Log.d(TAG, "notified data change event!");
-                            adapter.notifyDataSetChanged();
+                            if(mProductRow.size()>0){
+                                mSectionDataModel.setAllItemsInSection(mProductRow);
+                                allData.add(mSectionDataModel);
+                                Log.d(TAG, "notified data change event!");
+                                adapter.notifyDataSetChanged();
+                            }
                         }
                         else
                         {
-                            Toast.makeText(getContext(),"error occured!"+err.getMessage(),Toast.LENGTH_LONG).show();
+                            Toasty.error(getContext(),"error occured!"+err.getMessage(),Toast.LENGTH_LONG,true).show();
                         }
                     });
                 }
             }
             else{
-                Toast.makeText(getContext(),"NETWORK ERROR!",Toast.LENGTH_LONG).show();
+                Toasty.error(getContext(),"Error Occured! "+e.getMessage(),Toast.LENGTH_LONG,true).show();
                 Log.d(TAG, "LoadData: error"+ e.getMessage());
             }
         });

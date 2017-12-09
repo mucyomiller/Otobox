@@ -119,7 +119,7 @@ public class AboutActivity extends MaterialAboutActivity {
                         .sizeDp(18),
                 "Call Us",
                 true,
-                "+250 XXX XXX XXX"));
+                "+250788277274"));
 
         convenienceCardBuilder.addItem(ConvenienceBuilder.createMapItem(c,
                 new IconicsDrawable(c)

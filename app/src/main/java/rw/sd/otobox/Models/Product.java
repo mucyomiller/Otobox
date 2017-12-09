@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * Created by miller on 9/7/17.
  */
 
-public class Product implements Saleable, Serializable, Parcelable {
+public class Product implements Saleable,Parcelable {
     
     private static final long serialVersionUID = -4073256626483275668L;
     

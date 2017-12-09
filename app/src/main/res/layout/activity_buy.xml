@@ -53,8 +53,8 @@
             android:orientation="vertical">
             <TextView
                 android:id="@+id/brand_title"
-                android:textSize="24sp"
-                android:text="Audi"
+                android:textSize="18sp"
+                android:text="brand"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textStyle="bold"
@@ -64,31 +64,54 @@
                 />
             <TextView
                 android:id="@+id/model_title_upper"
-                android:text="A4"
+                android:text="model"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent" />
-
             <TextView
-                android:text="@string/choose_new_old"
-                android:textStyle="bold"
-                android:textSize="16sp"
+                android:id="@+id/generation_name"
+                android:text="generation"
+                android:textStyle="italic"
+                android:textSize="14sp"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent" />
-
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switch_filter"
-                android:textAllCaps="true"
-                android:textAlignment="center"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/old_stuff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:textStyle="bold"
+                    android:text="used"
+                    />
+                <it.beppi.tristatetogglebutton_library.TriStateToggleButton
+                    android:layout_width="80dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/switch_filter"
+                    app:tbDefaultStatus="mid"
+                    app:tbOffColor="@color/colorPrimary"
+                    app:tbOnColor="@color/colorPrimary"
+                    app:tbMidColor="@color/colorPrimary"
+                    />
+                <TextView
+                    android:id="@+id/new_stuff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:textStyle="bold"
+                    android:text="new"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
     <android.support.design.widget.TabLayout

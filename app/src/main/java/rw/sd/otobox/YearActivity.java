@@ -28,6 +28,7 @@ import com.shawnlin.numberpicker.NumberPicker;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import es.dmoral.toasty.Toasty;
 import mehdi.sakout.fancybuttons.FancyButton;
 import rw.sd.otobox.Models.Brand;
 import rw.sd.otobox.Models.Generation;
@@ -98,7 +99,7 @@ public class YearActivity extends AppCompatActivity {
                 }
             }else
             {
-                Toast.makeText(getApplicationContext(),"Error Occured!",Toast.LENGTH_LONG).show();
+                Toasty.error(getApplicationContext(),"error occured!"+e.getMessage(),Toast.LENGTH_SHORT,true).show();
             }
         });
 

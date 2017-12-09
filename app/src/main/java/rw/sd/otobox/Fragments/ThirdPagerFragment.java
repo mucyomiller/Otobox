@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -23,15 +24,20 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import rw.sd.otobox.Adapters.ProductsAdapter;
+import rw.sd.otobox.App;
 import rw.sd.otobox.Models.Model;
 import rw.sd.otobox.Models.Product;
 import rw.sd.otobox.R;
+import rx.parse2.ParseObservable;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ThirdPagerFragment extends Fragment {
+    private static final String TAG = "ThirdPagerFragment";
     private RecyclerView recyclerView;
     private ProductsAdapter adapter;
     private List<Product> productList;
@@ -76,17 +82,34 @@ public class ThirdPagerFragment extends Fragment {
      * Adding few products
      */
     private void prepareProducts() {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Spare");
-        query.include("model");
-        query.include("category");
-        query.findInBackground((Spare, e) -> {
-            for (ParseObject mSpare: Spare) {
-                if(mSpare.getParseObject("category").get("order").equals("2") && mSpare.getParseObject("model").get("name").toString().equals(model.getName())){
-                    Product a = new Product(mSpare.getObjectId(),mSpare.get("name").toString(),mSpare.get("quality").toString(),getString(R.string.server_base_url)+mSpare.get("url").toString(),Integer.valueOf(mSpare.get("warranty").toString()),BigDecimal.valueOf(Integer.valueOf(mSpare.get("price").toString())));
-                    productList.add(a);
-                }
+        getProducts("mid");
+        ((App)getActivity().getApplication()).bus().toObservable().subscribe(o -> {
+            if(o instanceof  String){
+                Log.d(TAG, " RxBus values we got! =>"+ o);
+                getProducts(o.toString());
             }
-            adapter.notifyDataSetChanged();
+        });
+    }
+
+
+    private  void  getProducts(String index){
+        //clear adapter
+        adapter.removeAll();
+        //creating observable
+        Observable<ParseObject> mSpare = ParseObservable.find(ParseQuery.getQuery("Spare").include("category"));
+        mSpare.filter(object ->{
+            if(index.equals("mid") && object.getParseObject("category").get("order").toString().equals("2")){
+                return true;
+            }else
+            {
+                return object.get("quality").toString().equals(index) && object.getParseObject("category").get("order").toString().equals("2");
+            }
+        }).observeOn(AndroidSchedulers.mainThread()).doOnComplete(() -> adapter.notifyDataSetChanged()).subscribe(object -> {
+            Log.d(TAG, "spares found:"+object.get("name").toString());
+            Product a = new Product(object.getObjectId(),object.get("name").toString(),object.get("quality").toString(),getString(R.string.server_base_url)+object.get("url").toString(),Integer.valueOf(object.get("warranty").toString()),BigDecimal.valueOf(Integer.valueOf(object.get("price").toString())));
+            productList.add(a);
+        }, e ->{
+            Log.d(TAG, "error occured!: "+ e.getMessage());
         });
     }
 

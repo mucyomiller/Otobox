@@ -18,7 +18,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.mucyomiller.shoppingcart.exception.ProductNotFoundException;
 import com.mucyomiller.shoppingcart.model.Cart;
 import com.mucyomiller.shoppingcart.model.Saleable;
 import com.mucyomiller.shoppingcart.util.CartHelper;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
 import rw.sd.otobox.Adapters.BrandsAdapter;
 import rw.sd.otobox.Adapters.CartAdapter;
 import rw.sd.otobox.Models.CartItem;
@@ -38,7 +41,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
     private CartAdapter adapter;
     private List<CartItem> ItemList;
     private Button mCheckout;
-    private TextView mTotalPrice;
+    static public TextView mTotalPrice;
     private RelativeLayout main_content;
     private  Cart cart;
 
@@ -56,11 +59,16 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
         mTotalPrice.setText(cart.getTotalPrice().toString());
         mCheckout  = (Button) findViewById(R.id.checkout);
         mCheckout.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("cart",cart);
-            Intent mIntent = new Intent(getApplicationContext(),OrderActivity.class);
-            mIntent.putExtras(bundle);
-            startActivity(mIntent);
+            if(cart.getTotalQuantity()>0){
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("cart",cart);
+                Intent mIntent = new Intent(getApplicationContext(),OrderActivity.class);
+                mIntent.putExtras(bundle);
+                startActivity(mIntent);
+            }else
+            {
+                Toasty.warning(v.getContext(),"Please add product on cart!", Toast.LENGTH_SHORT,true).show();
+            }
         });
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -119,24 +127,27 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
 
             // remove the item from recycler view
             adapter.removeItem(viewHolder.getAdapterPosition());
-            // remove it also from cart
-            cart.remove(deletedItem.getProduct());
-            mTotalPrice.setText(cart.getTotalPrice().toString());
-            // showing snack bar with Undo option
-            Snackbar snackbar = Snackbar
-                    .make(main_content, name + " removed from cart!", Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    // undo is selected, restore the deleted item
-                    adapter.restoreItem(deletedItem, deletedIndex);
-                    cart.add(deletedItem.getProduct(),deletedItem.getQuantity());
-                    mTotalPrice.setText(cart.getTotalPrice().toString());
-                }
-            });
-            snackbar.setActionTextColor(Color.YELLOW);
-            snackbar.show();
+            try {
+                // remove it also from cart
+                cart.remove(deletedItem.getProduct());
+                mTotalPrice.setText(cart.getTotalPrice().toString());
+                // showing snack bar with Undo option
+                Snackbar snackbar = Snackbar
+                        .make(main_content, name + " removed from cart!", Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // undo is selected, restore the deleted item
+                        adapter.restoreItem(deletedItem, deletedIndex);
+                        cart.add(deletedItem.getProduct(),deletedItem.getQuantity());
+                        mTotalPrice.setText(cart.getTotalPrice().toString());
+                    }
+                });
+                snackbar.setActionTextColor(Color.CYAN);
+                snackbar.show();
+            }catch (ProductNotFoundException e){
+                Toasty.error(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT,true).show();
+            }
         }
     }
 

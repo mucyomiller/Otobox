@@ -13,22 +13,31 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.github.juanlabrador.badgecounter.BadgeCounter;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import org.reactivestreams.Subscription;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
+import it.beppi.tristatetogglebutton_library.TriStateToggleButton;
 import rw.sd.otobox.Adapters.SectionsPagerAdapter;
 import rw.sd.otobox.Fragments.FirstPagerFragment;
 import rw.sd.otobox.Fragments.FourthPagerFragment;
 import rw.sd.otobox.Fragments.ThirdPagerFragment;
 import rw.sd.otobox.Fragments.SecondPagerFragment;
 import rw.sd.otobox.Models.Brand;
+import rw.sd.otobox.Models.Generation;
 import rw.sd.otobox.Models.Model;
 
 public class BuyActivity extends AppCompatActivity {
@@ -37,12 +46,12 @@ public class BuyActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
-    private TextView model_title,model_title_upper,brand_title;
+    private TextView model_title,model_title_upper,brand_title,generation_name;
     private ImageView brand_logo;
     private ArrayList<String> tabnames;
     private Bundle bundle;
-    private SwitchCompat switch_filter;
-    public  static boolean filter;
+    private TriStateToggleButton switch_filter;
+    public  static String  switchPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,32 +59,41 @@ public class BuyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_buy);
         model_title = (TextView) findViewById(R.id.model_title);
         model_title_upper = (TextView) findViewById(R.id.model_title_upper);
+        generation_name = (TextView) findViewById(R.id.generation_name);
         brand_title = (TextView) findViewById(R.id.brand_title);
         brand_logo = (ImageView) findViewById(R.id.brand_logo);
-        switch_filter = (SwitchCompat) findViewById(R.id.switch_filter);
-        switch_filter.setOnClickListener(v -> {
-            //Is the switch is on?
-            boolean on = ((SwitchCompat) v).isChecked();
-            if(on)
-            {
-                //Do something when switch is on/checked
-                filter = true;
-            }
-            else
-            {
-                //Do something when switch is off/unchecked
-                filter = false;
+        switch_filter = (TriStateToggleButton) findViewById(R.id.switch_filter);
+        switch_filter.setOnToggleChanged((toggleStatus, b, i) -> {
+            switch (toggleStatus) {
+                case off:
+                    //setting current switch position & send it through eventbus
+                    switchPos = "used";
+                    ((App)getApplication()).bus().send(switchPos);
+                    break;
+                case mid:
+                    //setting current switch position & send it through eventbus
+                    switchPos = "mid";
+                    ((App)getApplication()).bus().send(switchPos);
+                    break;
+                case on:
+                    //setting current switch position & send it through eventbus
+                    switchPos = "new";
+                    ((App)getApplication()).bus().send(switchPos);
+                    break;
             }
         });
+
         Model model = getIntent().getParcelableExtra("Model");
         Brand brand = getIntent().getParcelableExtra("Brand");
+        Generation generation = getIntent().getParcelableExtra("Generation");
         tabnames = new ArrayList<>();
         bundle = new Bundle();
         bundle.putParcelable("model",model);
-        bundle.putBoolean("filter",filter);
+        bundle.putString("filter",switchPos);
 
         brand_title.setText(brand.getName());
         model_title_upper.setText(model.getName());
+        generation_name.setText(generation.getName());
         // loading brand logo using Glide library
         Glide.with(getApplicationContext()).load(brand.getThumbnail()).into(brand_logo);
 
@@ -130,6 +148,17 @@ public class BuyActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_buy, menu);
+        int mNotificationCounter = 5;
+        // Create a condition (hide it if the count == 0)
+        if (mNotificationCounter > 0) {
+            BadgeCounter.update(this,
+                    menu.findItem(R.id.action_cart),
+                    R.drawable.icon_cart,
+                    BadgeCounter.BadgeColor.RED,
+                    mNotificationCounter);
+        } else {
+            BadgeCounter.hide(menu.findItem(R.id.action_cart));
+        }
         return true;
     }
 

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="rw.sd.otobox.ProductDetailActivity"
+    tools:showIn="@layout/activity_product_detail">
+    <LinearLayout
+        android:id="@+id/product_header_section"
+        android:layout_below="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/product_logo"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:maxWidth="80dp"
+            android:layout_weight="1"
+            android:src="@drawable/otobox_start"
+            android:scaleType="centerInside"
+            />
+        <View android:layout_height="match_parent"
+            android:layout_width="1dp"
+            android:background="@color/grey_300"/>
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/product_name"
+                android:text="product name"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent" />
+            <TextView
+                android:id="@+id/model_name"
+                android:textSize="18sp"
+                android:text="Model name"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                />
+            <TextView
+                android:id="@+id/generation_name"
+                android:text="generation name"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent" />
+            <TextView
+                android:id="@+id/generation_released"
+                android:text="generation year"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent" />
+            <TextView
+                android:id="@+id/product_price"
+                android:text="product price"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent" />
+            <TextView
+                android:id="@+id/product_quality"
+                android:text="product quality"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent" />
+            <TextView
+                android:id="@+id/product_condition"
+                android:text="product condition"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/product_detail_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginBottom="50dp"
+        android:paddingLeft="8dp"
+        android:paddingStart="8dp"
+        android:paddingRight="8dp"
+        android:paddingEnd="8dp">
+        <TextView
+            android:id="@+id/prod_details"
+            android:text="Lorem Ip sum"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/product_detail_cart_section"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingLeft="8dp"
+        android:paddingStart="8dp"
+        android:paddingRight="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp">
+        <Button
+            android:id="@+id/product_detail_add_to_cart"
+            android:text="Add product to cart!"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary"
+            android:drawableEnd="@drawable/icon_cart"
+            android:drawableRight="@drawable/icon_cart" />
+    </LinearLayout>
+</LinearLayout>

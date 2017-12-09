@@ -23,6 +23,9 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="false"
                 android:focusableInTouchMode="false"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="8dp"
                 android:scaleType="centerInside"
                 card_view:use_gradient="true"/>
 

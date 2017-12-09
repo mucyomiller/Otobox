@@ -11,15 +11,19 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import rw.sd.otobox.Bus.RxBus;
 
 /**
  * Created by mucyo miller on 8/30/17.
  */
 
 public class App  extends Application{
+    private RxBus bus;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        bus = new RxBus();
         //Parse.initialize(this);
         // Use for monitoring Parse network traffic
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -32,5 +36,9 @@ public class App  extends Application{
                 .applicationId(getResources().getString(R.string.parse_app_id)) // should correspond to APP_ID env variable
                 .clientBuilder(builder)
                 .server(getResources().getString(R.string.parse_server_url)).build());
+    }
+
+    public RxBus bus() {
+        return bus;
     }
 }

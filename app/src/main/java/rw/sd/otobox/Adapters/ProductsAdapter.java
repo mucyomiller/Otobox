@@ -19,9 +19,11 @@ import com.mucyomiller.shoppingcart.util.CartHelper;
 
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import rw.sd.otobox.BuyActivity;
 import rw.sd.otobox.Models.Model;
 import rw.sd.otobox.Models.Product;
+import rw.sd.otobox.ProductDetailActivity;
 import rw.sd.otobox.R;
 
 /**
@@ -83,17 +85,21 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
             Cart cart =  CartHelper.getCart();
             Log.d(TAG, "Adding product: " + product.getName());
             cart.add(product,1);
-            Toast.makeText(mContext, "Added to Cart!", Toast.LENGTH_SHORT).show();
+            Toasty.success(mContext, product.getName()+" added to Cart!", Toast.LENGTH_SHORT).show();
         });
 
         // loading brand cover using Glide library
         Glide.with(mContext).load(product.getThumbnail()).into(holder.thumbnail);
+        //set listener that goes to product detail activity
+        holder.mHolder.setOnClickListener(v -> {
+           Intent mIntent = new Intent(v.getContext(), ProductDetailActivity.class);
+           mIntent.putExtra("product",product);
+           v.getContext().startActivity(mIntent);
+        });
+    }
 
-//        holder.mHolder.setOnClickListener(v -> {
-//           Intent mIntent = new Intent(v.getContext(), BuyActivity.class);
-//           v.getContext().startActivity(mIntent);
-//            Toast.makeText(mContext, "Clicked All", Toast.LENGTH_SHORT).show();
-//        });
+    public void removeAll(){
+        productList.clear();
     }
 
     @Override

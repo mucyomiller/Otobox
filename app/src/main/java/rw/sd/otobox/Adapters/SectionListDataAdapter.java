@@ -4,6 +4,8 @@ package rw.sd.otobox.Adapters;
  * Created by miller on 11/29/17.
  */
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 
 import rw.sd.otobox.Models.Product;
+import rw.sd.otobox.ProductDetailActivity;
 import rw.sd.otobox.R;
 
 public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListDataAdapter.SingleItemRowHolder> {
@@ -54,6 +57,11 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                 .load(singleItem.getThumbnail())
                 .apply(requestOptions)
                 .into(holder.itemImage);
+        holder.itemView.setOnClickListener(v -> {
+            Intent mIntent = new Intent(v.getContext(), ProductDetailActivity.class);
+            mIntent.putExtra("product",singleItem);
+            v.getContext().startActivity(mIntent);
+        });
     }
 
     @Override
@@ -66,12 +74,13 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
         protected TextView tvTitle;
 
         protected ImageView itemImage;
+        protected CardView  itemView;
 
         public SingleItemRowHolder(View view) {
             super(view);
             this.tvTitle = (TextView) view.findViewById(R.id.tvTitle);
             this.itemImage = (ImageView) view.findViewById(R.id.itemImage);
-            view.setOnClickListener(v -> Toast.makeText(v.getContext(), tvTitle.getText(), Toast.LENGTH_SHORT).show());
+            this.itemView  = (CardView) view.findViewById(R.id.itemView);
         }
     }
 
