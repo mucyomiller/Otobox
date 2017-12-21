@@ -33,6 +33,7 @@ public class OrderActivity extends AppCompatActivity {
     private EditText names;
     private EditText phone;
     private EditText location;
+    private EditText vin;
     private TextView totalprice,vat,totalitems;
     private Button send;
 
@@ -44,9 +45,10 @@ public class OrderActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
 
-        cart = (Cart) bundle.getSerializable("cart");
+        cart = (Cart) bundle.getParcelable("cart");
         totalprice = (TextView) findViewById(R.id.totalprice);
         vat        = (TextView) findViewById(R.id.vat);
+        vin        = (EditText) findViewById(R.id.vin);
         totalitems = (TextView) findViewById(R.id.totalitems);
         totalprice.setText("TOTAL : "+cart.getTotalPrice());
         vat.setText("VAT : "+(cart.getTotalPrice().multiply(BigDecimal.valueOf(18))).divide(BigDecimal.valueOf(100)));
@@ -82,9 +84,11 @@ public class OrderActivity extends AppCompatActivity {
                     orderObject.put("amount", cart.getTotalPrice());
                     orderObject.put("vat", (cart.getTotalPrice().multiply(BigDecimal.valueOf(18))).divide(BigDecimal.valueOf(100)));
                     orderObject.put("itemcount",cart.getTotalQuantity());
+                    orderObject.put("vin",vin.getText().toString());
                     orderObject.save();
                     Toast.makeText(getApplicationContext(),"Order Sent Successfull",Toast.LENGTH_LONG).show();
-
+                    //save basic info is temp storage
+                    
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (ParseException e) {
@@ -106,6 +110,10 @@ public class OrderActivity extends AppCompatActivity {
         }
         if(location.getText().toString().isEmpty()){
             names.setError("Ahubarizwa Hakenewe!");
+            return false;
+        }
+        if(vin.getText().toString().isEmpty()){
+            names.setError("Nimero iranga ikinyabiziga irakenewe!");
             return false;
         }
         return true;

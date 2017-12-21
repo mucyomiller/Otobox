@@ -44,11 +44,10 @@
                 android:layout_width="match_parent" />
             <TextView
                 android:id="@+id/model_name"
-                android:textSize="18sp"
                 android:text="Model name"
+                android:textSize="14sp"
                 android:textAlignment="center"
                 android:textAllCaps="false"
-                android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="centerInside"
@@ -56,18 +55,16 @@
             <TextView
                 android:id="@+id/generation_name"
                 android:text="generation name"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:textAlignment="center"
+                android:textSize="14sp"
                 android:textAllCaps="true"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent" />
             <TextView
                 android:id="@+id/generation_released"
                 android:text="generation year"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:textAlignment="center"
+                android:textSize="14sp"
                 android:textAllCaps="true"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent" />
@@ -76,19 +73,25 @@
                 android:text="product price"
                 android:textStyle="bold"
                 android:textSize="14sp"
+                android:textColor="@color/red"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent" />
-            <TextView
+
+            <RatingBar
                 android:id="@+id/product_quality"
                 android:text="product quality"
+                style="?android:attr/ratingBarStyleSmall"
+                android:isIndicator="true"
+                android:stepSize="1"
+                android:theme="@style/RatingBar"
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent" />
+                android:layout_width="100dp" />
             <TextView
                 android:id="@+id/product_condition"
                 android:text="product condition"

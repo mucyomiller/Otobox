@@ -35,7 +35,7 @@ import rw.sd.otobox.R;
 public class NewArrivalFragment extends Fragment {
     private static final String TAG = "NewArrivalFragment";
     ArrayList<SectionDataModel> allData;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView,recyclerViewFirst;
     private Context mContext;
     private  NewArrivalsRecyclerviewAdapter adapter;
 
@@ -57,8 +57,10 @@ public class NewArrivalFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_newarrivals, container, false);
         //fragement content here
         mContext = view.getContext();
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
+        recyclerViewFirst = view.findViewById(R.id.recycler_view_first);
+        recyclerViewFirst.setHasFixedSize(true);
         adapter = new NewArrivalsRecyclerviewAdapter(getContext(), allData);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);

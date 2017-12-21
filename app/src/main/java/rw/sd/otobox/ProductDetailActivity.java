@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import es.dmoral.toasty.Toasty;
+import rw.sd.otobox.Event.CartEvent;
 import rw.sd.otobox.Models.Product;
 
 public class ProductDetailActivity extends AppCompatActivity {
@@ -34,8 +36,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     private static final String TAG = "ProductDetailActivity";
     private Product mProduct;
     private ImageView product_logo;
-    private TextView product_name,model_name,generation_name,generation_released,product_price,product_quality,product_condition,prod_details;
+    private TextView product_name,model_name,generation_name,generation_released,product_price,product_condition,prod_details;
     private Button product_detail_add_to_cart;
+    private RatingBar product_quality;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +51,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         generation_name = (TextView) findViewById(R.id.generation_name);
         generation_released = (TextView) findViewById(R.id.generation_released);
         product_price      = (TextView) findViewById(R.id.product_price);
-        product_quality = (TextView) findViewById(R.id.product_quality);
+        product_quality = (RatingBar) findViewById(R.id.product_quality);
         product_condition = (TextView) findViewById(R.id.product_condition);
         prod_details = (TextView) findViewById(R.id.prod_details);
         product_detail_add_to_cart = (Button) findViewById(R.id.product_detail_add_to_cart);
@@ -65,8 +68,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                     .apply(requestOptions)
                     .into(product_logo);
             product_name.setText(mProduct.getName());
-            product_price.setText(String.valueOf(mProduct.getPrice()));
-            product_quality.setText(String.valueOf(mProduct.getWarranty()));
+            product_price.setText(String.valueOf(mProduct.getPrice())+" RWF");
+            product_quality.setRating(mProduct.getWarranty());
+            product_quality.setNumStars(5);
             product_condition.setText(mProduct.getQuality());
             //getting unavailable datas
 //            Toasty.error(getApplicationContext(),"first =>"+mProduct.getpId(), Toast.LENGTH_SHORT).show();
@@ -92,6 +96,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                     Cart cart =  CartHelper.getCart();
                     Log.d(TAG, "Adding product: " + mProduct.getName());
                     cart.add(mProduct,1);
+                    //broadcast Cart change Event!
+                    CartEvent mCartEvent = new CartEvent("ADD",cart);
+                    ((App)v.getContext().getApplicationContext()).bus().send(mCartEvent);
                     Toasty.success(v.getContext(), mProduct.getName()+" added to Cart!", Toast.LENGTH_SHORT).show();
                 }else
                 {
@@ -110,17 +117,23 @@ public class ProductDetailActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_buy, menu);
-        int mNotificationCounter = 5;
-        // Create a condition (hide it if the count == 0)
-        if (mNotificationCounter > 0) {
-            BadgeCounter.update(this,
-                    menu.findItem(R.id.action_cart),
-                    R.drawable.icon_cart,
-                    BadgeCounter.BadgeColor.RED,
-                    mNotificationCounter);
-        } else {
-            BadgeCounter.hide(menu.findItem(R.id.action_cart));
-        }
+        Cart cart = CartHelper.getCart();
+        ((App)getApplication()).bus().toObservable().subscribe(event -> {
+            if(event instanceof CartEvent){
+                Log.d(TAG, " RxBus Cart Change event detected ! =>"+ ((CartEvent) event).getAction());
+                int mNotificationCounter = cart.getTotalQuantity();
+                // Create a condition (hide it if the count == 0)
+                if (mNotificationCounter > 0) {
+                    BadgeCounter.update(this,
+                            menu.findItem(R.id.action_cart),
+                            R.drawable.icon_cart,
+                            BadgeCounter.BadgeColor.RED,
+                            mNotificationCounter);
+                } else {
+                    BadgeCounter.hide(menu.findItem(R.id.action_cart));
+                }
+            }
+        });
         return true;
     }
 

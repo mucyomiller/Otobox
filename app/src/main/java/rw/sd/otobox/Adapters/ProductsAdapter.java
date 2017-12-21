@@ -20,7 +20,9 @@ import com.mucyomiller.shoppingcart.util.CartHelper;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import rw.sd.otobox.App;
 import rw.sd.otobox.BuyActivity;
+import rw.sd.otobox.Event.CartEvent;
 import rw.sd.otobox.Models.Model;
 import rw.sd.otobox.Models.Product;
 import rw.sd.otobox.ProductDetailActivity;
@@ -85,6 +87,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
             Cart cart =  CartHelper.getCart();
             Log.d(TAG, "Adding product: " + product.getName());
             cart.add(product,1);
+            //broadcast Cart change Event!
+            CartEvent mCartEvent = new CartEvent("ADD",cart);
+            ((App)v.getContext().getApplicationContext()).bus().send(mCartEvent);
             Toasty.success(mContext, product.getName()+" added to Cart!", Toast.LENGTH_SHORT).show();
         });
 

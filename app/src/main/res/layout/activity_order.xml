@@ -13,6 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -118,6 +119,8 @@
         <EditText
             android:id="@+id/names"
             android:padding="8dp"
+            android:imeOptions="actionDone"
+            android:inputType="textPersonName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -131,6 +134,8 @@
         <EditText
             android:id="@+id/phone"
             android:padding="8dp"
+            android:imeOptions="actionDone"
+            android:inputType="phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -142,17 +147,20 @@
         <EditText
             android:id="@+id/location"
             android:padding="8dp"
+            android:imeOptions="actionDone"
+            android:inputType="textAutoComplete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@drawable/rectangular"/>
         <TextView
-            android:text="VIN"
+            android:text="VIN(vehicle identification number)"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/vin"
             android:padding="8dp"
+            android:imeOptions="actionGo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"

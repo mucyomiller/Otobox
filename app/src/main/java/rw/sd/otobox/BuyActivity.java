@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.github.juanlabrador.badgecounter.BadgeCounter;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.mucyomiller.shoppingcart.model.Cart;
+import com.mucyomiller.shoppingcart.util.CartHelper;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -32,6 +34,7 @@ import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 import it.beppi.tristatetogglebutton_library.TriStateToggleButton;
 import rw.sd.otobox.Adapters.SectionsPagerAdapter;
+import rw.sd.otobox.Event.CartEvent;
 import rw.sd.otobox.Fragments.FirstPagerFragment;
 import rw.sd.otobox.Fragments.FourthPagerFragment;
 import rw.sd.otobox.Fragments.ThirdPagerFragment;
@@ -95,7 +98,7 @@ public class BuyActivity extends AppCompatActivity {
         model_title_upper.setText(model.getName());
         generation_name.setText(generation.getName());
         // loading brand logo using Glide library
-        Glide.with(getApplicationContext()).load(brand.getThumbnail()).into(brand_logo);
+        Glide.with(getApplicationContext()).load(generation.getUrl()).into(brand_logo);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -148,17 +151,23 @@ public class BuyActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_buy, menu);
-        int mNotificationCounter = 5;
-        // Create a condition (hide it if the count == 0)
-        if (mNotificationCounter > 0) {
-            BadgeCounter.update(this,
-                    menu.findItem(R.id.action_cart),
-                    R.drawable.icon_cart,
-                    BadgeCounter.BadgeColor.RED,
-                    mNotificationCounter);
-        } else {
-            BadgeCounter.hide(menu.findItem(R.id.action_cart));
-        }
+        Cart cart = CartHelper.getCart();
+        ((App)getApplication()).bus().toObservable().subscribe(event -> {
+            if(event instanceof CartEvent){
+                Log.d(TAG, " RxBus Cart Change event detected ! =>"+ ((CartEvent) event).getAction());
+               int mNotificationCounter = cart.getTotalQuantity();
+                // Create a condition (hide it if the count == 0)
+                if (mNotificationCounter > 0) {
+                    BadgeCounter.update(this,
+                            menu.findItem(R.id.action_cart),
+                            R.drawable.icon_cart,
+                            BadgeCounter.BadgeColor.RED,
+                            mNotificationCounter);
+                } else {
+                    BadgeCounter.hide(menu.findItem(R.id.action_cart));
+                }
+            }
+        });
         return true;
     }
 

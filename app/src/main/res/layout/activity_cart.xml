@@ -60,12 +60,15 @@
                 android:layout_width="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
+                android:textStyle="bold"
                 android:gravity="center_vertical"
                 android:text="TOTAL PRICE:"
                 android:layout_height="match_parent" />
             <TextView
                 android:id="@+id/total_price"
                 android:gravity="center_vertical"
+                android:textStyle="bold"
+                android:textColor="@color/red"
                 android:layout_toEndOf="@+id/total_price_label"
                 android:layout_toRightOf="@+id/total_price_label"
                 android:layout_width="wrap_content"

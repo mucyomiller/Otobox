@@ -1,5 +1,6 @@
 package rw.sd.otobox.Adapters;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,7 +24,9 @@ import com.mucyomiller.shoppingcart.util.CartHelper;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import rw.sd.otobox.App;
 import rw.sd.otobox.CartActivity;
+import rw.sd.otobox.Event.CartEvent;
 import rw.sd.otobox.Models.CartItem;
 import rw.sd.otobox.R;
 
@@ -58,13 +61,20 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
             holder.cartItemPrice.setText(cart.getCost(mCartItem.getProduct()).toString());
             holder.cartItemQuantity.setText(String.valueOf(cart.getQuantity(mCartItem.getProduct())));
             holder.itemQuantity.setText(String.valueOf(cart.getQuantity(mCartItem.getProduct())));
-            holder.btnAdd.setOnClickListener(v -> {
+            holder.btnAdd.setOnClickListener((View v) -> {
                 cart.add(mCartItem.getProduct(), 1);
+                //broadcast Cart change Event!
+                CartEvent mCartEvent = new CartEvent("ADD",cart);
+                ((App)v.getContext().getApplicationContext()).bus().send(mCartEvent);
                 notifyItemChanged(position);
             });
             holder.btnMinus.setOnClickListener(v -> {
                 try {
                     cart.remove(mCartItem.getProduct(), 1);
+                    //broadcast Cart change Event!
+                    CartEvent mCartEvent = new CartEvent("REMOVE",cart);
+                    ((App)v.getContext().getApplicationContext()).bus().send(mCartEvent);
+
                 } catch (QuantityOutOfRangeException e) {
                     Toasty.error(v.getContext(), e.getMessage(), Toast.LENGTH_SHORT, true).show();
                 } catch (ProductNotFoundException e) {

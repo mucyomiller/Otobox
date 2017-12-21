@@ -1,5 +1,8 @@
 package com.mucyomiller.shoppingcart.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -15,7 +18,7 @@ import com.mucyomiller.shoppingcart.exception.QuantityOutOfRangeException;
  * <p/>
  * A shopping cart has a map of {@link Saleable} products to their corresponding quantities.
  */
-public class Cart implements Serializable {
+public class Cart implements Parcelable {
     private static final long serialVersionUID = 42L;
 
     private Map<Saleable, Integer> cartItemMap = new HashMap<Saleable, Integer>();
@@ -183,4 +186,48 @@ public class Cart implements Serializable {
 
         return strBuilder.toString();
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.cartItemMap.size());
+        for (Entry<Saleable, Integer> entry : this.cartItemMap.entrySet()) {
+            dest.writeParcelable(entry.getKey(), flags);
+            dest.writeValue(entry.getValue());
+        }
+        dest.writeSerializable(this.totalPrice);
+        dest.writeInt(this.totalQuantity);
+    }
+
+    public Cart() {
+    }
+
+    protected Cart(Parcel in) {
+        int cartItemMapSize = in.readInt();
+        this.cartItemMap = new HashMap<Saleable, Integer>(cartItemMapSize);
+        for (int i = 0; i < cartItemMapSize; i++) {
+            Saleable key = in.readParcelable(Saleable.class.getClassLoader());
+            Integer value = (Integer) in.readValue(Integer.class.getClassLoader());
+            this.cartItemMap.put(key, value);
+        }
+        this.totalPrice = (BigDecimal) in.readSerializable();
+        this.totalQuantity = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Cart> CREATOR = new Parcelable.Creator<Cart>() {
+        @Override
+        public Cart createFromParcel(Parcel source) {
+            return new Cart(source);
+        }
+
+        @Override
+        public Cart[] newArray(int size) {
+            return new Cart[size];
+        }
+    };
 }
