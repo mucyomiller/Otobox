@@ -34,6 +34,7 @@ import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 import rw.sd.otobox.Adapters.ProductsAdapter;
 import rw.sd.otobox.App;
+import rw.sd.otobox.Models.Generation;
 import rw.sd.otobox.Models.Model;
 import rw.sd.otobox.Models.Product;
 import rw.sd.otobox.R;
@@ -47,7 +48,7 @@ public class FirstPagerFragment extends Fragment {
     private ProductsAdapter adapter;
     private List<Product> productList;
     private Context mContext;
-    private Model model;
+    private Generation generation;
     static Subject<Integer> mObservable = PublishSubject.create();
     private static final String TAG = "FirstPagerFragment";
 
@@ -59,7 +60,7 @@ public class FirstPagerFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            model = getArguments().getParcelable("model");
+            generation = getArguments().getParcelable("generation");
         }
     }
 
@@ -102,13 +103,13 @@ public class FirstPagerFragment extends Fragment {
         //clear adapter
         adapter.removeAll();
         //creating observable
-        Observable<ParseObject> mSpare = ParseObservable.find(ParseQuery.getQuery("Spare").include("category"));
+        Observable<ParseObject> mSpare = ParseObservable.find(ParseQuery.getQuery("Spare").include("category").include("generation").include("generation.model"));
         mSpare.filter(object ->{
-            if(index.equals("mid") && object.getParseObject("category").get("order").toString().equals("0")){
+            if(index.equals("mid") && object.getParseObject("category").get("order").toString().equals("0") && (object.getParseObject("generation") == null || object.getParseObject("generation").get("name").equals(generation.getName()))){
             return true;
         }else
         {
-            return object.get("quality").toString().equals(index) && object.getParseObject("category").get("order").toString().equals("0");
+            return object.get("quality").toString().equals(index) && object.getParseObject("category").get("order").toString().equals("0") && (object.getParseObject("generation") == null || object.getParseObject("generation").get("name").equals(generation.getName()));
         }
         }).observeOn(AndroidSchedulers.mainThread()).doOnComplete(() -> adapter.notifyDataSetChanged()).subscribe(object -> {
             Log.d(TAG, "spares found:"+object.get("name").toString());

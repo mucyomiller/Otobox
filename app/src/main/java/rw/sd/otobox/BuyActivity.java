@@ -99,7 +99,7 @@ public class BuyActivity extends AppCompatActivity {
         String released = getIntent().getStringExtra("released");
         tabnames = new ArrayList<>();
         bundle = new Bundle();
-        bundle.putParcelable("model",model);
+        bundle.putParcelable("generation",generation);
         bundle.putString("filter",switchPos);
 
         brand_title.setText(brand.getName());
