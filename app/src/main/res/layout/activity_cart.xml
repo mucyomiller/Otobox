@@ -62,7 +62,7 @@
                 android:layout_alignParentLeft="true"
                 android:textStyle="bold"
                 android:gravity="center_vertical"
-                android:text="TOTAL PRICE:"
+                android:text="TOTAL: "
                 android:layout_height="match_parent" />
             <TextView
                 android:id="@+id/total_price"
