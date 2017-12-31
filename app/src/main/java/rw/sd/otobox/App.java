@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
+import com.orhanobut.hawk.Hawk;
 import com.parse.Parse;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -36,6 +37,7 @@ public class App  extends Application{
                 .applicationId(getResources().getString(R.string.parse_app_id)) // should correspond to APP_ID env variable
                 .clientBuilder(builder)
                 .server(getResources().getString(R.string.parse_server_url)).build());
+        Hawk.init(this).build();
     }
 
     public RxBus bus() {

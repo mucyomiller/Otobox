@@ -1,6 +1,7 @@
 package rw.sd.otobox;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,10 +11,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mucyomiller.shoppingcart.model.Cart;
 import com.mucyomiller.shoppingcart.model.Saleable;
+import com.orhanobut.hawk.Hawk;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
 import rw.sd.otobox.Models.CartItem;
 import rw.sd.otobox.Models.Product;
 
@@ -64,6 +68,30 @@ public class OrderActivity extends AppCompatActivity {
         phone = (EditText) findViewById(R.id.phone);
         location = (EditText) findViewById(R.id.location);
         send = (Button) findViewById(R.id.send);
+
+        //check if userInfo exists and pre-fill user user opted-in
+        if(Hawk.contains("userInfo")){
+            new MaterialDialog.Builder(this)
+                    .title("pre-fill data")
+                    .content("It's looks likes you have used this form before\n" +
+                            "do you prefer to use previous form data?")
+                    .positiveText("Yes")
+                    .positiveColor(getResources().getColor(R.color.colorPrimary))
+                    .negativeText("No")
+                    .negativeColor(getResources().getColor(R.color.red))
+                    .onPositive((dialog, which) -> {
+                        ArrayList<String> userInfo = Hawk.get("userInfo");
+                        names.setText(userInfo.get(0));
+                        phone.setText(userInfo.get(1));
+                        location.setText(userInfo.get(2));
+                        vin.setText(userInfo.get(3));
+
+                    }).onNegative((dialog, which) -> {
+                        Hawk.delete("userInfo");
+                    })
+                    .show();
+        }
+
         send.setOnClickListener(v->{
             if(validate())
             {
@@ -91,6 +119,14 @@ public class OrderActivity extends AppCompatActivity {
                     orderObject.put("itemcount",cart.getTotalQuantity());
                     orderObject.put("vin",vin.getText().toString());
                     orderObject.save();
+                    //saving user infos on disk
+                    ArrayList<String> userInfo = new ArrayList<>();
+                    userInfo.add(names.getText().toString());
+                    userInfo.add(phone.getText().toString());
+                    userInfo.add(location.getText().toString());
+                    userInfo.add(vin.getText().toString());
+                    //commit to disk
+                    Hawk.put("userInfo",userInfo);
                     Toast.makeText(getApplicationContext(),"Order Sent Successfull",Toast.LENGTH_LONG).show();
                     //save basic info is temp storage
                     
