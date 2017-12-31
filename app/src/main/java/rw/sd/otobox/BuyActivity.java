@@ -60,6 +60,12 @@ public class BuyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getString(R.string.title_activity_buy));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         model_title = (TextView) findViewById(R.id.model_title);
         model_title_upper = (TextView) findViewById(R.id.model_title_upper);
         generation_name = (TextView) findViewById(R.id.generation_name);
@@ -103,10 +109,6 @@ public class BuyActivity extends AppCompatActivity {
         // loading brand logo using Glide library
         Glide.with(getApplicationContext()).load(generation.getUrl()).into(brand_logo);
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.title_activity_buy));
         setupViewPager();
 
     }

@@ -45,6 +45,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         product_logo = (ImageView) findViewById(R.id.product_logo);
         product_name = (TextView) findViewById(R.id.product_name);
         model_name   = (TextView) findViewById(R.id.model_name);

@@ -50,6 +50,7 @@ public class YearActivity extends AppCompatActivity {
         setContentView(R.layout.activity_year);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mGenerationList = new ArrayList<>();
         mYears = new ArrayList<>();
         year_cover_text = (TextView) findViewById(R.id.year_cover_text);

@@ -49,6 +49,7 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Cart");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         cart = CartHelper.getCart();
         Log.d(TAG, "onCreate: "+cart.getTotalPrice());
         main_content = (RelativeLayout) findViewById(R.id.main_content);
