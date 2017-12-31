@@ -32,7 +32,7 @@
         android:id="@+id/model_header"
        android:layout_below="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="110dp"
         android:background="@color/white"
         android:orientation="horizontal">
         <ImageView
@@ -76,6 +76,14 @@
                 android:text="generation"
                 android:textStyle="italic"
                 android:textSize="14sp"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent" />
+            <TextView
+                android:id="@+id/generation_year"
+                android:text="released"
+                android:textSize="12sp"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:layout_height="wrap_content"

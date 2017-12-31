@@ -76,14 +76,17 @@ public class ProductDetailActivity extends AppCompatActivity {
 //            Toasty.error(getApplicationContext(),"first =>"+mProduct.getpId(), Toast.LENGTH_SHORT).show();
             ParseQuery<ParseObject> mParse = ParseQuery.getQuery("Spare");
             mParse.whereEqualTo("objectId", mProduct.getpId());
-            mParse.include("model");
+            mParse.include("generation");
+            mParse.include("generation.model");
             mParse.getFirstInBackground((object, e) -> {
                 if(e == null){
                     if (object != null) {
 //                        Toasty.info(getApplicationContext(),object.get("name").toString(),Toast.LENGTH_SHORT,true).show();
-                        model_name.setText(object.getParseObject("model").get("name").toString());
-//                        generation_name.setText(object.getParseObject("generation").get("name").toString());
-//                        generation_released.setText(object.getParseObject("generation").get("released").toString());
+                        model_name.setText(object.getParseObject("generation").getParseObject("model").get("name").toString());
+                        generation_name.setText(object.getParseObject("generation").get("name").toString());
+                        generation_released.setText(object.getParseObject("generation").get("released").toString());
+                        prod_details.setText(object.get("description") != null ? object.get("description").toString() : "");
+
                     } else {
                         Toasty.error(getApplicationContext(),"Data not found! ", Toast.LENGTH_SHORT).show();
                     }

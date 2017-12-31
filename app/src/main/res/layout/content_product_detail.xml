@@ -115,7 +115,6 @@
         android:paddingEnd="8dp">
         <TextView
             android:id="@+id/prod_details"
-            android:text="Lorem Ip sum"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

@@ -12,14 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 import rw.sd.otobox.Adapters.NewArrivalsRecyclerviewAdapter;
@@ -35,7 +32,7 @@ import rw.sd.otobox.R;
 public class NewArrivalFragment extends Fragment {
     private static final String TAG = "NewArrivalFragment";
     ArrayList<SectionDataModel> allData;
-    private RecyclerView recyclerView,recyclerViewFirst;
+    private RecyclerView recyclerView;
     private Context mContext;
     private  NewArrivalsRecyclerviewAdapter adapter;
 
@@ -52,6 +49,7 @@ public class NewArrivalFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        LoadUncategorizedData();
         LoadData();
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_newarrivals, container, false);
@@ -59,11 +57,10 @@ public class NewArrivalFragment extends Fragment {
         mContext = view.getContext();
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
-        recyclerViewFirst = view.findViewById(R.id.recycler_view_first);
-        recyclerViewFirst.setHasFixedSize(true);
         adapter = new NewArrivalsRecyclerviewAdapter(getContext(), allData);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
+
         return view;
     }
 
@@ -99,7 +96,7 @@ public class NewArrivalFragment extends Fragment {
                             if(mProductRow.size()>0){
                                 mSectionDataModel.setAllItemsInSection(mProductRow);
                                 allData.add(mSectionDataModel);
-                                Log.d(TAG, "notified data change event!");
+                                Log.d(TAG, "notified dataset change event!");
                                 adapter.notifyDataSetChanged();
                             }
                         }
@@ -116,17 +113,37 @@ public class NewArrivalFragment extends Fragment {
             }
         });
 
-//        SectionDataModel test = new SectionDataModel();
-//        test.setHeaderTitle("test");
-//        ArrayList<SingleItemModel> singleItemTest = new ArrayList<SingleItemModel>();
-//        singleItemTest.add(new SingleItemModel("carina x", "http://google.com"));
-//        singleItemTest.add(new SingleItemModel("carina y", "http://google.com"));
-//        singleItemTest.add(new SingleItemModel("carina z", "http://google.com"));
-//        singleItemTest.add(new SingleItemModel("carina t", "http://google.com"));
-//        test.setAllItemsInSection(singleItemTest);
-//        allSampleData.add(test);
-
     }
-
+    public void LoadUncategorizedData() {
+        Log.d(TAG, "LoadUncategorizedData");
+        //setting section model
+        SectionDataModel mSectionDataModel = new SectionDataModel();
+        mSectionDataModel.setHeaderTitle("Common");
+        mSectionDataModel.setHeaderSubTitle("Spares");
+        //setting items model
+        ArrayList<Product> mProductRow = new ArrayList<>();
+        ParseQuery<ParseObject> mQuery = ParseQuery.getQuery("Spare");
+        mQuery.whereEqualTo("generation", null);
+        mQuery.orderByDescending("createdAt");
+        mQuery.setLimit(5);
+        mQuery.findInBackground((Spare, err) -> {
+            if(err == null) {
+                for (ParseObject mSpare : Spare) {
+                    Product a = new Product(mSpare.getObjectId(), mSpare.get("name").toString(), mSpare.get("quality").toString(), NewArrivalFragment.this.getString(R.string.server_base_url) + mSpare.get("url").toString(), Integer.valueOf(mSpare.get("warranty").toString()), BigDecimal.valueOf(Integer.valueOf(mSpare.get("price").toString())));
+                    mProductRow.add(a);
+                }
+                if(mProductRow.size()>0){
+                    mSectionDataModel.setAllItemsInSection(mProductRow);
+                    allData.add(mSectionDataModel);
+                    Log.d(TAG, "notified dataset change event!");
+                    adapter.notifyDataSetChanged();
+                }
+            }
+            else
+            {
+                Toasty.error(getContext(),"Error Occured!"+err.getMessage(),Toast.LENGTH_LONG,true).show();
+            }
+        });
+    }
 
 }

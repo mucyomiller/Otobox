@@ -94,6 +94,7 @@ public class YearActivity extends AppCompatActivity {
                         mIntent.putExtra("Model",mModel);
                         Log.d(TAG, "onCreate: selected year =>"+ numberPicker.getValue());
                         mIntent.putExtra("Generation",mGenerationList.get(numberPicker.getValue()));
+                        mIntent.putExtra("released",mYears.get(numberPicker.getValue()));
                         v.getContext().startActivity(mIntent);
                     });
                 }

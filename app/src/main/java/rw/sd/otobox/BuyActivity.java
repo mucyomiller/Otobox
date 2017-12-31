@@ -49,7 +49,7 @@ public class BuyActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
-    private TextView model_title,model_title_upper,brand_title,generation_name;
+    private TextView model_title,model_title_upper,brand_title,generation_name,generation_year;
     private ImageView brand_logo;
     private ArrayList<String> tabnames;
     private Bundle bundle;
@@ -63,6 +63,7 @@ public class BuyActivity extends AppCompatActivity {
         model_title = (TextView) findViewById(R.id.model_title);
         model_title_upper = (TextView) findViewById(R.id.model_title_upper);
         generation_name = (TextView) findViewById(R.id.generation_name);
+        generation_year = (TextView) findViewById(R.id.generation_year);
         brand_title = (TextView) findViewById(R.id.brand_title);
         brand_logo = (ImageView) findViewById(R.id.brand_logo);
         switch_filter = (TriStateToggleButton) findViewById(R.id.switch_filter);
@@ -89,6 +90,7 @@ public class BuyActivity extends AppCompatActivity {
         Model model = getIntent().getParcelableExtra("Model");
         Brand brand = getIntent().getParcelableExtra("Brand");
         Generation generation = getIntent().getParcelableExtra("Generation");
+        String released = getIntent().getStringExtra("released");
         tabnames = new ArrayList<>();
         bundle = new Bundle();
         bundle.putParcelable("model",model);
@@ -97,6 +99,7 @@ public class BuyActivity extends AppCompatActivity {
         brand_title.setText(brand.getName());
         model_title_upper.setText(model.getName());
         generation_name.setText(generation.getName());
+        generation_year.setText(released);
         // loading brand logo using Glide library
         Glide.with(getApplicationContext()).load(generation.getUrl()).into(brand_logo);
 
