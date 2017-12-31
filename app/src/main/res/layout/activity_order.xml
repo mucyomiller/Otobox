@@ -56,7 +56,6 @@
                 android:id="@+id/totalprice"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:textColor="@color/red"
                 android:textSize="16sp"
                 android:textAllCaps="false"
                 android:textStyle="bold"
