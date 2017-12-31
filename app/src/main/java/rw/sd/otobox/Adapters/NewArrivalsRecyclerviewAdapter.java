@@ -61,31 +61,37 @@ public class NewArrivalsRecyclerviewAdapter extends RecyclerView.Adapter<NewArri
         itemRowHolder.itemSubTitle.setText(sectionSubTitle);
         itemRowHolder.itemHeader.setMinimumWidth(Resources.getSystem().getDisplayMetrics().widthPixels -16);
         itemRowHolder.itemHeader.setOnClickListener(v -> {
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Model");
-            query.whereEqualTo("name", sectionSubTitle);
-            query.include("parent");
-            query.getFirstInBackground((object, e) -> {
-                if(e == null)
-                {
-                    Model mModel = new Model();
-                    mModel.setId(object.getObjectId());
-                    mModel.setName(object.get("name").toString());
-                    ParseObject pObject = object.getParseObject("parent");
-                    Brand mBrand = new Brand();
-                    mBrand.setId(pObject.getObjectId());
-                    mBrand.setName(pObject.get("name").toString());
-                    mBrand.setThumbnail(v.getResources().getString(R.string.server_base_url)+pObject.get("url").toString());
-                    mBrand.setNumOfModels(1);
-                    Intent mIntent = new Intent(v.getContext(), YearActivity.class);
-                    mIntent.putExtra("Model",mModel);
-                    mIntent.putExtra("Brand",mBrand);
-                    v.getContext().startActivity(mIntent);
-                }
-                else{
-                    Toasty.error(v.getContext(),e.getMessage(),Toast.LENGTH_SHORT,true).show();
-                    Log.d(TAG, "LoadData: error"+ e.getMessage());
-                }
-            });
+            //check if it's not common/spares
+            if(!sectionSubTitle.equals("Spares")){
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Model");
+                query.whereEqualTo("name", sectionSubTitle);
+                query.include("parent");
+                query.getFirstInBackground((object, e) -> {
+                    if(e == null)
+                    {
+                        Model mModel = new Model();
+                        mModel.setId(object.getObjectId());
+                        mModel.setName(object.get("name").toString());
+                        ParseObject pObject = object.getParseObject("parent");
+                        Brand mBrand = new Brand();
+                        mBrand.setId(pObject.getObjectId());
+                        mBrand.setName(pObject.get("name").toString());
+                        mBrand.setThumbnail(v.getResources().getString(R.string.server_base_url)+pObject.get("url").toString());
+                        mBrand.setNumOfModels(1);
+                        Intent mIntent = new Intent(v.getContext(), YearActivity.class);
+                        mIntent.putExtra("Model",mModel);
+                        mIntent.putExtra("Brand",mBrand);
+                        v.getContext().startActivity(mIntent);
+                    }
+                    else{
+                        Toasty.error(v.getContext(),e.getMessage(),Toast.LENGTH_SHORT,true).show();
+                        Log.d(TAG, "LoadData: error"+ e.getMessage());
+                    }
+                });
+            }else
+            {
+                Toasty.info(v.getContext(),"Not supported Here",Toast.LENGTH_SHORT,true).show();
+            }
         });
 
         SectionListDataAdapter itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems);
