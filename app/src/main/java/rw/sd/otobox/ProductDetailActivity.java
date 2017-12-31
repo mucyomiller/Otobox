@@ -81,17 +81,21 @@ public class ProductDetailActivity extends AppCompatActivity {
             mParse.getFirstInBackground((object, e) -> {
                 if(e == null){
                     if (object != null) {
-//                        Toasty.info(getApplicationContext(),object.get("name").toString(),Toast.LENGTH_SHORT,true).show();
-                        model_name.setText(object.getParseObject("generation").getParseObject("model").get("name").toString());
-                        generation_name.setText(object.getParseObject("generation").get("name").toString());
-                        generation_released.setText(object.getParseObject("generation").get("released").toString());
+                        if(object.getParseObject("generation") != null){
+                            model_name.setText(object.getParseObject("generation").getParseObject("model").get("name").toString());
+                            generation_name.setText(object.getParseObject("generation").get("name").toString());
+                            generation_released.setText(object.getParseObject("generation").get("released").toString());
+                        }else
+                        {
+                        Toasty.info(getApplicationContext(),"generation details not found!",Toast.LENGTH_SHORT,true).show();
+                        }
                         prod_details.setText(object.get("description") != null ? object.get("description").toString() : "");
 
                     } else {
-                        Toasty.error(getApplicationContext(),"Data not found! ", Toast.LENGTH_SHORT).show();
+                        Toasty.info(getApplicationContext(),"Detail description not found! ", Toast.LENGTH_SHORT).show();
                     }
                 }else{
-                    Toasty.error(getApplicationContext(),"Error Occured!"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toasty.error(getApplicationContext(),"Error Occurred!"+e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
             product_detail_add_to_cart.setOnClickListener(v->{
@@ -110,7 +114,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             });
         }catch (Exception e)
         {
-            Toasty.error(getApplicationContext(),"Error Occured! "+e.getMessage(),Toast.LENGTH_SHORT).show();
+            Toasty.error(getApplicationContext(),"Error Occurred! "+e.getMessage(),Toast.LENGTH_SHORT).show();
         }
     }
 
