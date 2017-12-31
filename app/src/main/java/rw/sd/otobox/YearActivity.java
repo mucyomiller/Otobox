@@ -138,6 +138,9 @@ public class YearActivity extends AppCompatActivity {
                 Intent mSearchIntent = new Intent(YearActivity.this,AboutActivity.class);
                 startActivity(mSearchIntent);
                 return true;
+            case android.R.id.home:
+                this.onBackPressed();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

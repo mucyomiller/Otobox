@@ -165,6 +165,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                 Intent mCartIntent = new Intent(getApplicationContext(),CartActivity.class);
                 startActivity(mCartIntent);
                 return true;
+            case android.R.id.home:
+                this.onBackPressed();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

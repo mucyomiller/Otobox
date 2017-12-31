@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -59,8 +60,8 @@ public class OrderActivity extends AppCompatActivity {
         vat        = (TextView) findViewById(R.id.vat);
         vin        = (EditText) findViewById(R.id.vin);
         totalitems = (TextView) findViewById(R.id.totalitems);
-        totalprice.setText("TOTAL : "+cart.getTotalPrice());
-        vat.setText("VAT : "+(cart.getTotalPrice().multiply(BigDecimal.valueOf(18))).divide(BigDecimal.valueOf(100)));
+        totalprice.setText("TOTAL : "+cart.getTotalPrice()+" RWF");
+        vat.setText("VAT : "+(cart.getTotalPrice().multiply(BigDecimal.valueOf(18))).divide(BigDecimal.valueOf(100))+" RWF");
         totalitems.setText("Items : "+cart.getTotalQuantity());
 
         Log.d(TAG, "onCreate: ");
@@ -159,4 +160,22 @@ public class OrderActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch (id){
+            case android.R.id.home:
+                this.onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }
