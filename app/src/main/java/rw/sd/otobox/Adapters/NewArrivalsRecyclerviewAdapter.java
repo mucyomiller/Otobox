@@ -62,7 +62,7 @@ public class NewArrivalsRecyclerviewAdapter extends RecyclerView.Adapter<NewArri
         itemRowHolder.itemHeader.setMinimumWidth(Resources.getSystem().getDisplayMetrics().widthPixels -16);
         itemRowHolder.itemHeader.setOnClickListener(v -> {
             //check if it's not common/spares
-            if(!sectionSubTitle.equals("Spares")){
+            if(!sectionSubTitle.equals("")){
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("Model");
                 query.whereEqualTo("name", sectionSubTitle);
                 query.include("parent");

@@ -118,8 +118,8 @@ public class NewArrivalFragment extends Fragment {
         Log.d(TAG, "LoadUncategorizedData");
         //setting section model
         SectionDataModel mSectionDataModel = new SectionDataModel();
-        mSectionDataModel.setHeaderTitle("Common");
-        mSectionDataModel.setHeaderSubTitle("Spares");
+        mSectionDataModel.setHeaderTitle("");
+        mSectionDataModel.setHeaderSubTitle("");
         //setting items model
         ArrayList<Product> mProductRow = new ArrayList<>();
         ParseQuery<ParseObject> mQuery = ParseQuery.getQuery("Spare");
