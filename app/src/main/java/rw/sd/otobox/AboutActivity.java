@@ -193,6 +193,121 @@ public class AboutActivity extends MaterialAboutActivity {
                         .sizeDp(18),
                 "material-about-library", "2016", "Daniel Stone",
                 OpenSourceLicense.APACHE_2);
+        MaterialAboutCard MucyoMillerShoppingCartLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "mucyomiller-shopping-cart", "2017", "Mucyo Miller",
+                OpenSourceLicense.MIT);
+
+        MaterialAboutCard AndroidParseLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "android-parse", "2017", "parse contributors",
+                OpenSourceLicense.MIT);
+        MaterialAboutCard SupportDesignLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "Android Support Design", "2017", "Google",
+                OpenSourceLicense.MIT);
+
+        MaterialAboutCard AndroidSupportLibraryLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "Android Support Library", "2017", "Google",
+                OpenSourceLicense.MIT);
+        MaterialAboutCard NumberPickerLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "Number Picker", "2017", "shawnlin",
+                OpenSourceLicense.MIT);
+        MaterialAboutCard fancybuttonsLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "fancybuttons", "2017", "medyo",
+                OpenSourceLicense.MIT);
+        MaterialAboutCard lottieLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "lottie", "2017", "AirBnB",
+                OpenSourceLicense.MIT);
+        MaterialAboutCard rxrelayLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "rxrelay", "2017", "Jake Wharton",
+                OpenSourceLicense.MIT);
+        MaterialAboutCard rxbindingLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "rxbinding", "2017", "Jake Wharton",
+                OpenSourceLicense.MIT);
+        MaterialAboutCard loaderviewlibraryLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "loaderviewlibrary", "2017", "elyeproj",
+                OpenSourceLicense.MIT);
+        MaterialAboutCard gsonLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "gson", "2017", "Google",
+                OpenSourceLicense.MIT);
+        MaterialAboutCard TriStateToggleButtonLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "TriStateToggleButton", "2017", "BeppiMenozzi",
+                OpenSourceLicense.MIT);
+        MaterialAboutCard badgecounterLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "badgecounter", "2017", "juanlabrador",
+                OpenSourceLicense.MIT);
+        MaterialAboutCard ToastyLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "Toasty", "2017", "GrenderG",
+                OpenSourceLicense.MIT);
+        MaterialAboutCard hawkLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "hawk", "2017", "orhanobut",
+                OpenSourceLicense.MIT);
+        MaterialAboutCard  materialdialogsLicenseCard = ConvenienceBuilder.createLicenseCard(c,
+                new IconicsDrawable(c)
+                        .icon(GoogleMaterial.Icon.gmd_book)
+                        .color(ContextCompat.getColor(c, colorIcon))
+                        .sizeDp(18),
+                "material-dialogs", "2017", "afollestad",
+                OpenSourceLicense.MIT);
+
 
         return new MaterialAboutList(
                 rxjavaLicenseCard,
@@ -202,7 +317,25 @@ public class AboutActivity extends MaterialAboutActivity {
                 glideLicenseCard,
                 materialAboutLIbraryLicenseCard,
                 androidIconicsLicenseCard,
-                leakCanaryLicenseCard);
+                leakCanaryLicenseCard,
+                MucyoMillerShoppingCartLicenseCard,
+                AndroidParseLicenseCard,
+                SupportDesignLicenseCard,
+                AndroidSupportLibraryLicenseCard,
+                NumberPickerLicenseCard,
+                fancybuttonsLicenseCard,
+                lottieLicenseCard,
+                rxrelayLicenseCard,
+                rxbindingLicenseCard,
+                loaderviewlibraryLicenseCard,
+                gsonLicenseCard,
+                TriStateToggleButtonLicenseCard,
+                badgecounterLicenseCard,
+                ToastyLicenseCard,
+                hawkLicenseCard,
+                materialdialogsLicenseCard
+
+        );
     }
 
     @Nullable
