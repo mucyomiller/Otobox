@@ -36,6 +36,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private static final String TAG = "ProductDetailActivity";
     private Product mProduct;
     private ImageView product_logo;
+    private Cart cart;
     private TextView product_name,model_name,generation_name,generation_released,product_price,product_condition,prod_details;
     private Button product_detail_add_to_cart;
     private RatingBar product_quality;
@@ -43,9 +44,10 @@ public class ProductDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        cart =  CartHelper.getCart();
         product_logo = (ImageView) findViewById(R.id.product_logo);
         product_name = (TextView) findViewById(R.id.product_name);
         model_name   = (TextView) findViewById(R.id.model_name);
@@ -101,7 +103,6 @@ public class ProductDetailActivity extends AppCompatActivity {
             });
             product_detail_add_to_cart.setOnClickListener(v->{
                 if(mProduct != null){
-                    Cart cart =  CartHelper.getCart();
                     Log.d(TAG, "Adding product: " + mProduct.getName());
                     cart.add(mProduct,1);
                     //broadcast Cart change Event!
@@ -126,17 +127,30 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_buy, menu);
         Cart cart = CartHelper.getCart();
+
+        //showing previous cart datas if available
+        int mNotificationCounter = cart.getProducts().size();
+        // Create a condition (hide it if the count == 0)
+        if (mNotificationCounter > 0) {
+            BadgeCounter.update(this,
+                    menu.findItem(R.id.action_cart),
+                    R.drawable.icon_cart,
+                    BadgeCounter.BadgeColor.RED,
+                    mNotificationCounter);
+        } else {
+            BadgeCounter.hide(menu.findItem(R.id.action_cart));
+        }
+
         ((App)getApplication()).bus().toObservable().subscribe(event -> {
             if(event instanceof CartEvent){
                 Log.d(TAG, " RxBus Cart Change event detected ! =>"+ ((CartEvent) event).getAction());
-                int mNotificationCounter = cart.getTotalQuantity();
                 // Create a condition (hide it if the count == 0)
-                if (mNotificationCounter > 0) {
+                if (cart.getProducts().size() > 0) {
                     BadgeCounter.update(this,
                             menu.findItem(R.id.action_cart),
                             R.drawable.icon_cart,
                             BadgeCounter.BadgeColor.RED,
-                            mNotificationCounter);
+                            cart.getProducts().size());
                 } else {
                     BadgeCounter.hide(menu.findItem(R.id.action_cart));
                 }

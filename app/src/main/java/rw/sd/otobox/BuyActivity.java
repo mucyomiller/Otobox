@@ -157,17 +157,29 @@ public class BuyActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_buy, menu);
         Cart cart = CartHelper.getCart();
+        //showing previous cart datas if available
+        int mNotificationCounter = cart.getProducts().size();
+        // Create a condition (hide it if the count == 0)
+        if (mNotificationCounter > 0) {
+            BadgeCounter.update(this,
+                    menu.findItem(R.id.action_cart),
+                    R.drawable.icon_cart,
+                    BadgeCounter.BadgeColor.RED,
+                    mNotificationCounter);
+        } else {
+            BadgeCounter.hide(menu.findItem(R.id.action_cart));
+        }
+
         ((App)getApplication()).bus().toObservable().subscribe(event -> {
             if(event instanceof CartEvent){
                 Log.d(TAG, " RxBus Cart Change event detected ! =>"+ ((CartEvent) event).getAction());
-               int mNotificationCounter = cart.getTotalQuantity();
                 // Create a condition (hide it if the count == 0)
-                if (mNotificationCounter > 0) {
+                if (cart.getProducts().size() > 0) {
                     BadgeCounter.update(this,
                             menu.findItem(R.id.action_cart),
                             R.drawable.icon_cart,
                             BadgeCounter.BadgeColor.RED,
-                            mNotificationCounter);
+                            cart.getProducts().size());
                 } else {
                     BadgeCounter.hide(menu.findItem(R.id.action_cart));
                 }
