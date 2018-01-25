@@ -27,6 +27,10 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.Locale;
+
 import es.dmoral.toasty.Toasty;
 import rw.sd.otobox.Event.CartEvent;
 import rw.sd.otobox.Models.Product;
@@ -71,7 +75,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                     .apply(requestOptions)
                     .into(product_logo);
             product_name.setText(mProduct.getName());
-            product_price.setText(String.valueOf(mProduct.getPrice())+" RWF");
+            NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            format.setCurrency(Currency.getInstance("RWF"));
+            product_price.setText(format.format(mProduct.getPrice()));
             product_quality.setRating(mProduct.getWarranty());
             product_quality.setNumStars(5);
             product_condition.setText(mProduct.getQuality());

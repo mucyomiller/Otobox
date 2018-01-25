@@ -17,7 +17,10 @@ import com.bumptech.glide.Glide;
 import com.mucyomiller.shoppingcart.model.Cart;
 import com.mucyomiller.shoppingcart.util.CartHelper;
 
+import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 import es.dmoral.toasty.Toasty;
 import rw.sd.otobox.App;
@@ -82,7 +85,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
         holder.title.setText(product.getName());
         holder.quality.setText(product.getQuality());
         holder.warranty.setRating(product.getWarranty());
-        holder.price.setText(product.getPrice().toString()+" Rwf");
+        NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        format.setCurrency(Currency.getInstance("RWF"));
+        holder.price.setText( format.format(product.getPrice()));
         holder.addToCart.setOnClickListener(v -> {
             Cart cart =  CartHelper.getCart();
             Log.d(TAG, "Adding product: " + product.getName());

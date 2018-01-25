@@ -23,8 +23,11 @@ import com.mucyomiller.shoppingcart.model.Cart;
 import com.mucyomiller.shoppingcart.model.Saleable;
 import com.mucyomiller.shoppingcart.util.CartHelper;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
@@ -55,12 +58,14 @@ public class CartActivity extends AppCompatActivity implements RecyclerItemTouch
         Log.d(TAG, "onCreate: "+cart.getTotalPrice());
         main_content = (RelativeLayout) findViewById(R.id.main_content);
         mTotalPrice = (TextView) findViewById(R.id.total_price);
+        NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        format.setCurrency(Currency.getInstance("RWF"));
 
-        mTotalPrice.setText(cart.getTotalPrice().toString()+" RWF");
+        mTotalPrice.setText(format.format(cart.getTotalPrice()));
         ((App)getApplication()).bus().toObservable().subscribe(event -> {
             if(event instanceof CartEvent){
                 Log.d(TAG, " RxBus cart change event detected type of! =>"+((CartEvent) event).getAction());
-                mTotalPrice.setText(cart.getTotalPrice().toString()+" RWF");
+                mTotalPrice.setText(format.format(cart.getTotalPrice()));
             }
         });
         mCheckout  = (Button) findViewById(R.id.checkout);

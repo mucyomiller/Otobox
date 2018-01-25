@@ -25,8 +25,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
@@ -60,7 +63,9 @@ public class OrderActivity extends AppCompatActivity {
         vat        = (TextView) findViewById(R.id.vat);
         vin        = (EditText) findViewById(R.id.vin);
         totalitems = (TextView) findViewById(R.id.totalitems);
-        totalprice.setText("TOTAL : "+cart.getTotalPrice()+" RWF");
+        NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        format.setCurrency(Currency.getInstance("RWF"));
+        totalprice.setText("TOTAL : "+format.format(cart.getTotalPrice()));
         vat.setText("VAT : "+(cart.getTotalPrice().multiply(BigDecimal.valueOf(18))).divide(BigDecimal.valueOf(100))+" RWF");
         totalitems.setText("Items : "+cart.getTotalQuantity());
 
