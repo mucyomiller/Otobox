@@ -36,7 +36,9 @@ public class App  extends Application{
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getResources().getString(R.string.parse_app_id)) // should correspond to APP_ID env variable
                 .clientBuilder(builder)
-                .server(getResources().getString(R.string.parse_server_url)).build());
+                .server(getResources().getString(R.string.parse_server_url))
+                .enableLocalDataStore()
+                .build());
         Hawk.init(this).build();
     }
 
