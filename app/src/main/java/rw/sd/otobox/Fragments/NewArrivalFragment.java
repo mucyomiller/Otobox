@@ -102,13 +102,14 @@ public class NewArrivalFragment extends Fragment {
                         }
                         else
                         {
-                            Toasty.error(getContext(),"error occured!"+err.getMessage(),Toast.LENGTH_LONG,true).show();
+//                            Toasty.error(getContext(),"error occured!"+err.getMessage(),Toast.LENGTH_LONG,true).show();
+                            Log.e(TAG,e.getMessage());
                         }
                     });
                 }
             }
             else{
-                Toasty.error(getContext(),"Error Occured! "+e.getMessage(),Toast.LENGTH_LONG,true).show();
+//                Toasty.error(getContext(),"Error Occured! "+e.getMessage(),Toast.LENGTH_LONG,true).show();
                 Log.d(TAG, "LoadData: error"+ e.getMessage());
             }
         });

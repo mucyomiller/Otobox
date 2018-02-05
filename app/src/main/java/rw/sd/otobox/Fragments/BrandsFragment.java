@@ -97,7 +97,7 @@ public class BrandsFragment extends Fragment {
                 adapter.notifyItemRangeChanged(0,brandList.size());
             }
             else{
-                Toasty.error(getContext(),"Network Error!",Toast.LENGTH_LONG,true).show();
+                Toasty.error(getContext(),"Oops Connection Error",Toast.LENGTH_SHORT,true).show();
                 Log.d(TAG, "prepareBrands: error"+ e.getMessage());
             }
         });
