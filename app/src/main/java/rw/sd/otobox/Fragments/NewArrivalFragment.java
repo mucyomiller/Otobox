@@ -12,14 +12,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import es.dmoral.toasty.Toasty;
 import rw.sd.otobox.Adapters.NewArrivalsRecyclerviewAdapter;
+import rw.sd.otobox.Models.Arrival;
 import rw.sd.otobox.Models.Product;
 import rw.sd.otobox.Models.SectionDataModel;
 import rw.sd.otobox.R;
@@ -32,6 +37,7 @@ import rw.sd.otobox.R;
 public class NewArrivalFragment extends Fragment {
     private static final String TAG = "NewArrivalFragment";
     ArrayList<SectionDataModel> allData;
+    ArrayList<Arrival> mArrivalList;
     private RecyclerView recyclerView;
     private Context mContext;
     private  NewArrivalsRecyclerviewAdapter adapter;
@@ -43,7 +49,8 @@ public class NewArrivalFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        allData = new ArrayList<SectionDataModel>();
+        allData = new ArrayList<>();
+        mArrivalList = new ArrayList<>();
     }
 
     @Override
@@ -65,58 +72,8 @@ public class NewArrivalFragment extends Fragment {
     }
 
 
-    public void LoadData() {
-
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Model");
-        query.include("parent");
-        query.orderByAscending("createdAt");
-        query.setLimit(10);
-        query.findInBackground((Model, e) -> {
-            if(e == null)
-            {
-                for(ParseObject mModel: Model) {
-                    Log.d(TAG, "LoadData: for =>"+mModel.get("name").toString());
-                    ParseObject mBrand = mModel.getParseObject("parent");
-                    //setting section model
-                    SectionDataModel mSectionDataModel = new SectionDataModel();
-                    mSectionDataModel.setHeaderTitle(mBrand.get("name").toString());
-                    mSectionDataModel.setHeaderSubTitle(mModel.get("name").toString());
-                    //setting items model
-                    ArrayList<Product> mProductRow = new ArrayList<>();
-                    ParseQuery<ParseObject> mQuery = ParseQuery.getQuery("Spare");
-                    mQuery.whereEqualTo("model", mModel);
-                    mQuery.orderByDescending("createdAt");
-                    mQuery.setLimit(5);
-                    mQuery.findInBackground((Spare, err) -> {
-                        if(err == null) {
-                            for (ParseObject mSpare : Spare) {
-                                Product a = new Product(mSpare.getObjectId(), mSpare.get("name").toString(), mSpare.get("quality").toString(), NewArrivalFragment.this.getString(R.string.server_base_url) + mSpare.get("url").toString(), Integer.valueOf(mSpare.get("warranty").toString()), BigDecimal.valueOf(Integer.valueOf(mSpare.get("price").toString())));
-                                mProductRow.add(a);
-                            }
-                            if(mProductRow.size()>0){
-                                mSectionDataModel.setAllItemsInSection(mProductRow);
-                                allData.add(mSectionDataModel);
-                                Log.d(TAG, "notified dataset change event!");
-                                adapter.notifyDataSetChanged();
-                            }
-                        }
-                        else
-                        {
-//                            Toasty.error(getContext(),"error occured!"+err.getMessage(),Toast.LENGTH_LONG,true).show();
-                            Log.e(TAG,e.getMessage());
-                        }
-                    });
-                }
-            }
-            else{
-//                Toasty.error(getContext(),"Error Occured! "+e.getMessage(),Toast.LENGTH_LONG,true).show();
-                Log.d(TAG, "LoadData: error"+ e.getMessage());
-            }
-        });
-
-    }
     public void LoadUncategorizedData() {
-        Log.d(TAG, "LoadUncategorizedData");
+        Log.d(TAG, "Load data withou categorized");
         //setting section model
         SectionDataModel mSectionDataModel = new SectionDataModel();
         mSectionDataModel.setHeaderTitle("");
@@ -136,7 +93,7 @@ public class NewArrivalFragment extends Fragment {
                 if(mProductRow.size()>0){
                     mSectionDataModel.setAllItemsInSection(mProductRow);
                     allData.add(mSectionDataModel);
-                    Log.d(TAG, "notified dataset change event!");
+                    Log.d(TAG, "uncategorized dataset change event!");
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -145,6 +102,69 @@ public class NewArrivalFragment extends Fragment {
                 Toasty.error(getContext(),"Error Occured!"+err.getMessage(),Toast.LENGTH_LONG,true).show();
             }
         });
+    }
+
+    public void LoadData() {
+    Log.d(TAG, "Loading data with category");
+    //setting items model
+    ParseQuery<ParseObject> mQuery = ParseQuery.getQuery("Spare");
+    mQuery.include("generation");
+    mQuery.include("generation.model");
+    mQuery.include("generation.model.parent");
+    mQuery.setLimit(1000);
+    mQuery.orderByDescending("createdAt");
+    mQuery.findInBackground((Spare, err) -> {
+    if(err == null && Spare.size() > 0) {
+        for (ParseObject mSpare : Spare) {
+            if (mSpare.getParseObject("generation") != null && mSpare.getParseObject("generation").getParseObject("model") != null && mSpare.getParseObject("generation").getParseObject("model").getParseObject("parent") != null){
+                Product a = new Product(mSpare.getObjectId(), mSpare.get("name").toString(), mSpare.get("quality").toString(), NewArrivalFragment.this.getString(R.string.server_base_url) + mSpare.get("url").toString(), Integer.valueOf(mSpare.get("warranty").toString()), BigDecimal.valueOf(Integer.valueOf(mSpare.get("price").toString())));
+                Arrival mArrival = new Arrival(mSpare.getParseObject("generation").getParseObject("model").getParseObject("parent").get("name").toString(),mSpare.getParseObject("generation").getParseObject("model").get("name").toString(),mSpare.getParseObject("generation").get("name").toString(),a,mSpare.getCreatedAt());
+                mArrivalList.add(mArrival);
+            }
+        }
+//        Log.d(TAG, "mArrivalList Size =>"+mArrivalList.size());
+//        Log.d(TAG, "i HAVE =>"+mArrivalList.toString());
+        if(mArrivalList.size() > 0){
+            //sorting & Multimaping returned datas
+            //define group function
+            Function<Arrival,String> ArrivalGroupFunc = new Function<Arrival, String>() {
+                @Override
+                public String apply(Arrival input) {
+                    return input.model;
+                }
+            };
+            Multimap<String, Arrival> multimap = Multimaps.index(mArrivalList, ArrivalGroupFunc);
+            Log.d(TAG, "WE GOT =>"+ multimap.toString());
+            //setting section model
+            int mCount = 0;
+           for(String key : multimap.keySet()){
+               mCount++;
+               ArrayList<Product> mProductRow = new ArrayList<>();
+               ArrayList<Arrival> mArrivalArrayListRowData = new ArrayList<>();
+               Collection<Arrival> mCollectionRowData = multimap.get(key);
+               mArrivalArrayListRowData.addAll(mCollectionRowData);
+               SectionDataModel mSectionDataModel = new SectionDataModel();
+               mSectionDataModel.setHeaderTitle(mArrivalArrayListRowData.get(0).brand);
+               mSectionDataModel.setHeaderSubTitle(key);
+               for(int i = 0; i < mArrivalArrayListRowData.size(); i++){
+                   if(i == 5){
+                       break;
+                   }
+                   Product mProduct = mArrivalArrayListRowData.get(i).getProduct();
+                   mProductRow.add(mProduct);
+               }
+
+               if(mCount == 10){
+                   break;
+               }
+               mSectionDataModel.setAllItemsInSection(mProductRow);
+               allData.add(mSectionDataModel);
+           }
+            Log.d(TAG, "categorized dataset change event!");
+            adapter.notifyDataSetChanged();
+        }
+    }
+    });
     }
 
 }

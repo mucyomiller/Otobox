@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -20,6 +21,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:2.0.1'
     }
 }
 
@@ -33,7 +38,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:design:27.0.2'
-//    implementation 'com.parse:parse-android:1.15.8'
     implementation 'com.parse:parse-android:1.16.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
@@ -61,5 +65,8 @@ dependencies {
     implementation 'com.github.GrenderG:Toasty:1.2.5'
     implementation 'com.orhanobut:hawk:2.0.1'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.mikepenz:fastadapter:3.2.3@aar'
+    implementation 'com.google.guava:guava:24.0-android'
+    implementation 'com.android.support:multidex:1.0.1'
 
 }

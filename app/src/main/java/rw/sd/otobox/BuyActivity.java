@@ -35,8 +35,13 @@ import io.reactivex.subjects.Subject;
 import it.beppi.tristatetogglebutton_library.TriStateToggleButton;
 import rw.sd.otobox.Adapters.SectionsPagerAdapter;
 import rw.sd.otobox.Event.CartEvent;
+import rw.sd.otobox.Fragments.EighthPagerFragment;
+import rw.sd.otobox.Fragments.FifthPagerFragment;
 import rw.sd.otobox.Fragments.FirstPagerFragment;
 import rw.sd.otobox.Fragments.FourthPagerFragment;
+import rw.sd.otobox.Fragments.NinthPagerFragment;
+import rw.sd.otobox.Fragments.SeventhPagerFragment;
+import rw.sd.otobox.Fragments.SixthPagerFragment;
 import rw.sd.otobox.Fragments.ThirdPagerFragment;
 import rw.sd.otobox.Fragments.SecondPagerFragment;
 import rw.sd.otobox.Models.Brand;
@@ -128,10 +133,26 @@ public class BuyActivity extends AppCompatActivity {
         FourthPagerFragment mFourthPagerFragment = new FourthPagerFragment();
         mFourthPagerFragment.setArguments(bundle);
         mSectionsPagerAdapter.addFragemnt(mFourthPagerFragment);
+        FifthPagerFragment mFifthPagerFragment = new FifthPagerFragment();
+        mFifthPagerFragment.setArguments(bundle);
+        mSectionsPagerAdapter.addFragemnt(mFifthPagerFragment);
+        SixthPagerFragment mSixthPagerFragment = new SixthPagerFragment();
+        mSixthPagerFragment.setArguments(bundle);
+        mSectionsPagerAdapter.addFragemnt(mSixthPagerFragment);
+        SeventhPagerFragment mSeventhPagerFragment = new SeventhPagerFragment();
+        mSeventhPagerFragment.setArguments(bundle);
+        mSectionsPagerAdapter.addFragemnt(mSeventhPagerFragment);
+        EighthPagerFragment mEighthPagerFragment = new EighthPagerFragment();
+        mEighthPagerFragment.setArguments(bundle);
+        mSectionsPagerAdapter.addFragemnt(mEighthPagerFragment);
+        NinthPagerFragment mNinthPagerFragment =  new NinthPagerFragment();
+        mNinthPagerFragment.setArguments(bundle);
+        mSectionsPagerAdapter.addFragemnt(mNinthPagerFragment);
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(4);
+        mViewPager.setOffscreenPageLimit(9);
 
         //
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -148,6 +169,11 @@ public class BuyActivity extends AppCompatActivity {
             tabLayout.getTabAt(1).setText(tabnames.get(1));
             tabLayout.getTabAt(2).setText(tabnames.get(2));
             tabLayout.getTabAt(3).setText(tabnames.get(3));
+            tabLayout.getTabAt(4).setText(tabnames.get(4));
+            tabLayout.getTabAt(5).setText(tabnames.get(5));
+            tabLayout.getTabAt(6).setText(tabnames.get(6));
+            tabLayout.getTabAt(7).setText(tabnames.get(7));
+            tabLayout.getTabAt(8).setText(tabnames.get(8));
         });
 
     }
@@ -204,7 +230,7 @@ public class BuyActivity extends AppCompatActivity {
                 startActivity(mSearchIntent);
                 return true;
             case R.id.action_cart:
-//                Toast.makeText(this, "Clicked cart", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Clicked cart", Toast.LENGTH_SHORT).show();
                 Intent mCartIntent = new Intent(getApplicationContext(),CartActivity.class);
                 startActivity(mCartIntent);
                 return true;

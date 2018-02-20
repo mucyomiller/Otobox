@@ -103,7 +103,7 @@ public class FirstPagerFragment extends Fragment {
         //clear adapter
         adapter.removeAll();
         //creating observable
-        Observable<ParseObject> mSpare = ParseObservable.find(ParseQuery.getQuery("Spare").include("category").include("generation").include("generation.model"));
+        Observable<ParseObject> mSpare = ParseObservable.find(ParseQuery.getQuery("Spare").setLimit(1000).include("category").include("generation").include("generation.model"));
         mSpare.filter(object ->{
             if(index.equals("mid") && object.getParseObject("category").get("order").toString().equals("0") && (object.getParseObject("generation") == null || object.getParseObject("generation").get("name").equals(generation.getName()))){
             return true;

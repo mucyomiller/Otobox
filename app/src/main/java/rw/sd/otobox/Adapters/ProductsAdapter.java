@@ -87,6 +87,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
         holder.warranty.setRating(product.getWarranty());
         NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
         format.setCurrency(Currency.getInstance("RWF"));
+        format.setMinimumFractionDigits(0);
         holder.price.setText( format.format(product.getPrice()));
         holder.addToCart.setOnClickListener(v -> {
             Cart cart =  CartHelper.getCart();

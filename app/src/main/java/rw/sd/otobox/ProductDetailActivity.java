@@ -1,10 +1,14 @@
 package rw.sd.otobox;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.ListViewCompat;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +24,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.github.juanlabrador.badgecounter.BadgeCounter;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
 import com.mucyomiller.shoppingcart.model.Cart;
 import com.mucyomiller.shoppingcart.util.CartHelper;
 import com.parse.GetCallback;
@@ -27,12 +34,22 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Currency;
+import java.util.List;
 import java.util.Locale;
 
 import es.dmoral.toasty.Toasty;
+import rw.sd.otobox.Adapters.DescriptionAdapter;
+import rw.sd.otobox.Adapters.ModelsAdapter;
 import rw.sd.otobox.Event.CartEvent;
+import rw.sd.otobox.Models.Description;
 import rw.sd.otobox.Models.Product;
 
 public class ProductDetailActivity extends AppCompatActivity {
@@ -41,9 +58,12 @@ public class ProductDetailActivity extends AppCompatActivity {
     private Product mProduct;
     private ImageView product_logo;
     private Cart cart;
-    private TextView product_name,model_name,generation_name,generation_released,product_price,product_condition,prod_details;
+    private TextView product_name,model_name,generation_name,generation_released,product_price,product_condition;
+    RecyclerView prod_details;
     private Button product_detail_add_to_cart;
     private RatingBar product_quality;
+    public List<Description> descriptionList;
+    public DescriptionAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +71,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         cart =  CartHelper.getCart();
         product_logo = (ImageView) findViewById(R.id.product_logo);
         product_name = (TextView) findViewById(R.id.product_name);
@@ -60,7 +81,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         product_price      = (TextView) findViewById(R.id.product_price);
         product_quality = (RatingBar) findViewById(R.id.product_quality);
         product_condition = (TextView) findViewById(R.id.product_condition);
-        prod_details = (TextView) findViewById(R.id.prod_details);
+        //recyclerview item & configs
+        prod_details = (RecyclerView) findViewById(R.id.prod_details);
+        descriptionList = new ArrayList<>();
+        adapter = new DescriptionAdapter(this, descriptionList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        prod_details.setLayoutManager(mLayoutManager);
+        prod_details.setAdapter(adapter);
+        //add to cart button
         product_detail_add_to_cart = (Button) findViewById(R.id.product_detail_add_to_cart);
         //getting intents
         mProduct = getIntent().getParcelableExtra("product");
@@ -77,6 +105,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             product_name.setText(mProduct.getName());
             NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
             format.setCurrency(Currency.getInstance("RWF"));
+            format.setMinimumFractionDigits(0);
             product_price.setText(format.format(mProduct.getPrice()));
             product_quality.setRating(mProduct.getWarranty());
             product_quality.setNumStars(5);
@@ -96,12 +125,32 @@ public class ProductDetailActivity extends AppCompatActivity {
                             generation_released.setText(object.getParseObject("generation").get("released").toString());
                         }else
                         {
-                        Toasty.info(getApplicationContext(),"generation details not found!",Toast.LENGTH_SHORT,true).show();
+                        Toasty.info(getApplicationContext(),"No Generation Found!",Toast.LENGTH_SHORT,true).show();
                         }
-                        prod_details.setText(object.get("description") != null ? object.get("description").toString() : "");
+
+                        //Populate ListViewCompat
+                        String descr = object.get("description") != null ? object.get("description").toString() : null;
+                       if(!descr.isEmpty()){
+                           try {
+                               JSONArray dataArr = new JSONArray(descr);
+//                            Log.d(TAG,dataArr.toString());
+                               for (int i = 0;i<dataArr.length();i++) {
+                                   JSONObject jsonObject = dataArr.getJSONObject(i);
+                                   Description mDescription = new Description();
+                                   mDescription.setDesc_name(jsonObject.getString("name")+" :");
+                                   mDescription.setDesc_desc(jsonObject.getString("desc"));
+                                   descriptionList.add(mDescription);
+                               }
+                               adapter.notifyDataSetChanged();
+
+                           } catch (JSONException e1) {
+                               Log.e(TAG, e1.getMessage());
+                               e1.printStackTrace();
+                           }
+                       }
 
                     } else {
-                        Toasty.info(getApplicationContext(),"Detail description not found! ", Toast.LENGTH_SHORT).show();
+                        Toasty.info(getApplicationContext(),"No Description Found! ", Toast.LENGTH_SHORT).show();
                     }
                 }else{
                     Toasty.error(getApplicationContext(),"Error Occurred!"+e.getMessage(), Toast.LENGTH_SHORT).show();

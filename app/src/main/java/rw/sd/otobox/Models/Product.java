@@ -128,4 +128,16 @@ public class Product implements Saleable,Parcelable {
             return new Product[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "pId='" + pId + '\'' +
+                ", name='" + name + '\'' +
+                ", quality='" + quality + '\'' +
+                ", thumbnail='" + thumbnail + '\'' +
+                ", warranty=" + warranty +
+                ", price=" + price +
+                '}';
+    }
 }

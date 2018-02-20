@@ -21,7 +21,10 @@ import com.mucyomiller.shoppingcart.exception.QuantityOutOfRangeException;
 import com.mucyomiller.shoppingcart.model.Cart;
 import com.mucyomiller.shoppingcart.util.CartHelper;
 
+import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 import es.dmoral.toasty.Toasty;
 import rw.sd.otobox.App;
@@ -54,11 +57,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         try {
+            //Currency Formatting
+            NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            format.setCurrency(Currency.getInstance("RWF"));
+            format.setMinimumFractionDigits(0);
+
             Cart cart = CartHelper.getCart();
             CartItem mCartItem = itemList.get(position);
             holder.cartItemName.setText(mCartItem.getProduct().getName());
-            holder.cartItemUnitPrice.setText(mCartItem.getProduct().getPrice().toString());
-            holder.cartItemPrice.setText(cart.getCost(mCartItem.getProduct()).toString());
+            holder.cartItemUnitPrice.setText(format.format(mCartItem.getProduct().getPrice()));
+            holder.cartItemPrice.setText(format.format(cart.getCost(mCartItem.getProduct())));
             holder.cartItemQuantity.setText(String.valueOf(cart.getQuantity(mCartItem.getProduct())));
             holder.itemQuantity.setText(String.valueOf(cart.getQuantity(mCartItem.getProduct())));
             holder.btnAdd.setOnClickListener((View v) -> {
@@ -70,15 +78,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
             });
             holder.btnMinus.setOnClickListener(v -> {
                 try {
-                    cart.remove(mCartItem.getProduct(), 1);
-                    //broadcast Cart change Event!
-                    CartEvent mCartEvent = new CartEvent("REMOVE",cart);
-                    ((App)v.getContext().getApplicationContext()).bus().send(mCartEvent);
-
+                        cart.remove(mCartItem.getProduct(), 1);
+                        //broadcast Cart change Event!
+                        CartEvent mCartEvent = new CartEvent("REMOVE",cart);
+                        ((App)v.getContext().getApplicationContext()).bus().send(mCartEvent);
                 } catch (QuantityOutOfRangeException e) {
-                    Toasty.error(v.getContext(), e.getMessage(), Toast.LENGTH_SHORT, true).show();
+                    Toasty.error(v.getContext(), "Out of range Error!", Toast.LENGTH_SHORT, true).show();
                 } catch (ProductNotFoundException e) {
-                    Toasty.error(v.getContext(), e.getMessage(), Toast.LENGTH_SHORT, true).show();
+                    Toasty.error(v.getContext(), "Error Not Found or Deleted!", Toast.LENGTH_SHORT, true).show();
                 }
                 notifyItemChanged(position);
             });

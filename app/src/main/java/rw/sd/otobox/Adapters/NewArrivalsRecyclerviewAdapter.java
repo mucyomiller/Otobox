@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import es.dmoral.toasty.Toasty;
 import rw.sd.otobox.Models.Brand;
 import rw.sd.otobox.Models.Model;
+import rw.sd.otobox.Models.Product;
 import rw.sd.otobox.Models.SectionDataModel;
 import rw.sd.otobox.R;
 import rw.sd.otobox.YearActivity;
@@ -55,7 +56,7 @@ public class NewArrivalsRecyclerviewAdapter extends RecyclerView.Adapter<NewArri
         final String sectionName = dataList.get(i).getHeaderTitle();
         final String sectionSubTitle = dataList.get(i).getHeaderSubTitle();
 
-        ArrayList singleSectionItems = dataList.get(i).getAllItemsInSection();
+        ArrayList<Product> singleSectionItems = dataList.get(i).getAllItemsInSection();
 
         itemRowHolder.itemTitle.setText(sectionName);
         itemRowHolder.itemSubTitle.setText(sectionSubTitle);
@@ -94,7 +95,7 @@ public class NewArrivalsRecyclerviewAdapter extends RecyclerView.Adapter<NewArri
             }
         });
 
-        SectionListDataAdapter itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems);
+        SectionListDataAdapter itemListDataAdapter = new SectionListDataAdapter(mContext,singleSectionItems);
 
         itemRowHolder.recycler_view_list.setHasFixedSize(true);
         itemRowHolder.recycler_view_list.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));

@@ -101,6 +101,8 @@ public class OrderActivity extends AppCompatActivity {
         send.setOnClickListener(v->{
             if(validate())
             {
+                //disable button
+                send.setEnabled(false);
                 //getting cart items
                 List<CartItem> cartItems = new ArrayList<CartItem>();
                 Map<Saleable, Integer> itemMap = (Map<Saleable, Integer>)cart.getItemWithQuantity();
@@ -134,6 +136,10 @@ public class OrderActivity extends AppCompatActivity {
                     //commit to disk
                     Hawk.put("userInfo",userInfo);
                     Toast.makeText(getApplicationContext(),"Order Sent Successfull",Toast.LENGTH_LONG).show();
+                    // redirect back to MainActivity
+                    Intent mIntent = new Intent(getApplicationContext(),MainActivity.class);
+                    finish();
+                    startActivity(mIntent);
                     //save basic info is temp storage
                     
                 } catch (JSONException e) {

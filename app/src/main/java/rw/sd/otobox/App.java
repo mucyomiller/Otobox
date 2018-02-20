@@ -1,6 +1,9 @@
 package rw.sd.otobox;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
@@ -18,7 +21,7 @@ import rw.sd.otobox.Bus.RxBus;
  * Created by mucyo miller on 8/30/17.
  */
 
-public class App  extends Application{
+public class App  extends MultiDexApplication{
     private RxBus bus;
 
     @Override
@@ -44,5 +47,11 @@ public class App  extends Application{
 
     public RxBus bus() {
         return bus;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

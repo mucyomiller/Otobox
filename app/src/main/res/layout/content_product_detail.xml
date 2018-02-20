@@ -113,15 +113,20 @@
         android:paddingStart="8dp"
         android:paddingRight="8dp"
         android:paddingEnd="8dp">
-        <TextView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/prod_details"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/product_detail_cart_section"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:paddingLeft="8dp"
         android:paddingStart="8dp"
         android:paddingRight="8dp"
@@ -132,7 +137,7 @@
             android:text="Add product to cart!"
             android:textColor="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:background="@color/colorPrimary"
             android:drawableEnd="@drawable/icon_cart"
             android:drawableRight="@drawable/icon_cart" />

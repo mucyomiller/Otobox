@@ -15,17 +15,11 @@ import android.widget.Toast;
 
 public class SearchableActivity extends AppCompatActivity {
     private static final String TAG = "SearchableActivity";
-    Button btn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchable);
         // Get the intent, verify the action and get the query
-
-            btn = (Button) findViewById(R.id.btn);
-            btn.setOnClickListener(v ->{
-                Toast.makeText(this, "Ok lambda", Toast.LENGTH_SHORT).show();
-            });
         Intent intent = getIntent();
         HandleIntent(intent);
     }

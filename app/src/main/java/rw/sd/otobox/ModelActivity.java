@@ -90,6 +90,8 @@ public class ModelActivity extends AppCompatActivity {
         // parse query for getting models belongs to current Brand
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Model");
         query.whereEqualTo("parent",myBrand);
+        //no brand will superpass thousands models
+        query.setLimit(1000);
         query.findInBackground((Model, e) -> {
             if(e == null){
                 for (ParseObject mModel: Model) {

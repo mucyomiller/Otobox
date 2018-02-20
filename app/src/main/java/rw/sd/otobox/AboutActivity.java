@@ -24,14 +24,18 @@ import com.danielstone.materialaboutlibrary.util.OpenSourceLicense;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.orhanobut.hawk.Hawk;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
+import java.util.ArrayList;
 
 import bolts.Task;
 
 
 public class AboutActivity extends MaterialAboutActivity {
+    private static final String TAG = "AboutActivity";
     public static final String THEME_EXTRA = "";
     public static final int THEME_LIGHT_LIGHTBAR = 0;
     public static final int THEME_LIGHT_DARKBAR = 1;
@@ -39,41 +43,51 @@ public class AboutActivity extends MaterialAboutActivity {
     public static final int THEME_DARK_DARKBAR = 3;
     public static final int THEME_CUSTOM_CARDVIEW = 4;
     protected int colorIcon = R.color.mal_color_icon_light_theme;
-    public String website = "http://otoboxx.com";
+    public boolean loaded = false;
+    public String website = "http://otobox.com";
     public String phone;
     public String email;
     public String latitude;
     public String longitude;
-
+    ArrayList<String> mAboutInfo;
     @NonNull
     @Override
     protected MaterialAboutList getMaterialAboutList(@NonNull Context c) {
-        MaterialAboutCard.Builder appCardBuilder = new MaterialAboutCard.Builder();
-
+        mAboutInfo = new ArrayList<>();
         //retrieving data first form cache then online
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Contact");
         query.fromNetwork().getFirstInBackground((object, e) -> {
             if(e == null){
-                object.pinInBackground();
+                loaded = true;
+                Log.d(TAG, "getMaterialAboutList: Data");
                 website   = object.get("website").toString();
                 phone     = object.get("phone").toString();
                 email     = object.get("email").toString();
                 latitude  = object.get("lat").toString();
                 longitude = object.get("long").toString();
-            }else
-            {
-                query.fromLocalDatastore().getFirstInBackground((object1, e1) -> {
-                    if(e1 == null){
-                        website   = object1.get("website").toString();
-                        phone     = object1.get("phone").toString();
-                        email     = object1.get("email").toString();
-                        latitude  = object1.get("lat").toString();
-                        longitude = object1.get("long").toString();
-                    }
-                });
+
+                //setting mAbout ArrayList
+                mAboutInfo.add(website);
+                mAboutInfo.add(phone);
+                mAboutInfo.add(email);
+                mAboutInfo.add(latitude);
+                mAboutInfo.add(longitude);
+                Log.d(TAG, "getMaterialAboutList: GOT =>"+ mAboutInfo.toString());
+                Hawk.put("mAboutInfo",mAboutInfo);
             }
         });
 
+        if(Hawk.contains("mAboutInfo")){
+            loaded = true;
+            mAboutInfo = Hawk.get("mAboutInfo");
+            website = mAboutInfo.get(0);
+            phone   = mAboutInfo.get(1);
+            email   = mAboutInfo.get(2);
+            latitude = mAboutInfo.get(3);
+            longitude = mAboutInfo.get(4);
+        }
+
+        MaterialAboutCard.Builder appCardBuilder = new MaterialAboutCard.Builder();
         // Add items to card
         appCardBuilder.addItem(new MaterialAboutTitleItem.Builder()
                 .text("Otobox")
@@ -113,8 +127,7 @@ public class AboutActivity extends MaterialAboutActivity {
                     }
                 })
                 .build());
-
-
+        //informations
         MaterialAboutCard.Builder convenienceCardBuilder = new MaterialAboutCard.Builder();
 
         convenienceCardBuilder.title("About Us");
@@ -159,12 +172,12 @@ public class AboutActivity extends MaterialAboutActivity {
                 .icon(CommunityMaterial.Icon.cmd_whatsapp)
                 .color(ContextCompat.getColor(c, colorIcon))
                 .sizeDp(18),()->{
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_VIEW);
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_VIEW);
 
-                    String url = "https://api.whatsapp.com/send?phone="+ PhoneNumberUtils.stripSeparators(phone);
-                    sendIntent.setData(Uri.parse(url));
-                    startActivity(sendIntent);
+            String url = "https://api.whatsapp.com/send?phone="+ PhoneNumberUtils.stripSeparators(phone);
+            sendIntent.setData(Uri.parse(url));
+            startActivity(sendIntent);
         }));
 
         convenienceCardBuilder.addItem(ConvenienceBuilder.createMapItem(c,
@@ -175,9 +188,12 @@ public class AboutActivity extends MaterialAboutActivity {
                 "Visit Us",
                 null,
                 latitude+","+longitude));
-
-        return new MaterialAboutList(appCardBuilder.build(), convenienceCardBuilder.build());
+            if(loaded){
+                return new MaterialAboutList(appCardBuilder.build(), convenienceCardBuilder.build());
+            }
+        return new MaterialAboutList(appCardBuilder.build());
     }
+
 
     public static MaterialAboutList createMaterialAboutLicenseList(final Context c, int colorIcon) {
 

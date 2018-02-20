@@ -124,10 +124,12 @@
     </LinearLayout>
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
-        app:tabSelectedTextColor="@color/colorPrimary"
         android:layout_below="@+id/model_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabMode="scrollable"
+        android:layout_gravity="center_horizontal">
 
         <android.support.design.widget.TabItem
             android:id="@+id/tabItem"
