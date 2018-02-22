@@ -62,8 +62,8 @@ public class NewArrivalsRecyclerviewAdapter extends RecyclerView.Adapter<NewArri
         itemRowHolder.itemSubTitle.setText(sectionSubTitle);
         itemRowHolder.itemHeader.setMinimumWidth(Resources.getSystem().getDisplayMetrics().widthPixels -16);
         itemRowHolder.itemHeader.setOnClickListener(v -> {
-            //check if it's not common/spares
-            if(!sectionSubTitle.equals("")){
+            //check if it's not general/spares
+            if(!sectionName.equals("General")){
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("Model");
                 query.whereEqualTo("name", sectionSubTitle);
                 query.include("parent");
@@ -85,7 +85,7 @@ public class NewArrivalsRecyclerviewAdapter extends RecyclerView.Adapter<NewArri
                         v.getContext().startActivity(mIntent);
                     }
                     else{
-                        Toasty.error(v.getContext(),e.getMessage(),Toast.LENGTH_SHORT,true).show();
+                        Toasty.error(v.getContext(),"Selected Model Data Not Found!",Toast.LENGTH_SHORT,true).show();
                         Log.d(TAG, "LoadData: error"+ e.getMessage());
                     }
                 });

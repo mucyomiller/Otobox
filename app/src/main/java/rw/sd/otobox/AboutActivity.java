@@ -54,29 +54,7 @@ public class AboutActivity extends MaterialAboutActivity {
     @Override
     protected MaterialAboutList getMaterialAboutList(@NonNull Context c) {
         mAboutInfo = new ArrayList<>();
-        //retrieving data first form cache then online
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Contact");
-        query.fromNetwork().getFirstInBackground((object, e) -> {
-            if(e == null){
-                loaded = true;
-                Log.d(TAG, "getMaterialAboutList: Data");
-                website   = object.get("website").toString();
-                phone     = object.get("phone").toString();
-                email     = object.get("email").toString();
-                latitude  = object.get("lat").toString();
-                longitude = object.get("long").toString();
-
-                //setting mAbout ArrayList
-                mAboutInfo.add(website);
-                mAboutInfo.add(phone);
-                mAboutInfo.add(email);
-                mAboutInfo.add(latitude);
-                mAboutInfo.add(longitude);
-                Log.d(TAG, "getMaterialAboutList: GOT =>"+ mAboutInfo.toString());
-                Hawk.put("mAboutInfo",mAboutInfo);
-            }
-        });
-
+        //mAboutInfo DATA is retrieved from MainActivity
         if(Hawk.contains("mAboutInfo")){
             loaded = true;
             mAboutInfo = Hawk.get("mAboutInfo");

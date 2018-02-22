@@ -1,5 +1,6 @@
 package rw.sd.otobox.Fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -76,8 +77,8 @@ public class NewArrivalFragment extends Fragment {
         Log.d(TAG, "Load data withou categorized");
         //setting section model
         SectionDataModel mSectionDataModel = new SectionDataModel();
-        mSectionDataModel.setHeaderTitle("");
-        mSectionDataModel.setHeaderSubTitle("");
+        mSectionDataModel.setHeaderTitle("General");
+        mSectionDataModel.setHeaderSubTitle("Spares");
         //setting items model
         ArrayList<Product> mProductRow = new ArrayList<>();
         ParseQuery<ParseObject> mQuery = ParseQuery.getQuery("Spare");
@@ -86,15 +87,19 @@ public class NewArrivalFragment extends Fragment {
         mQuery.setLimit(5);
         mQuery.findInBackground((Spare, err) -> {
             if(err == null) {
-                for (ParseObject mSpare : Spare) {
-                    Product a = new Product(mSpare.getObjectId(), mSpare.get("name").toString(), mSpare.get("quality").toString(), NewArrivalFragment.this.getString(R.string.server_base_url) + mSpare.get("url").toString(), Integer.valueOf(mSpare.get("warranty").toString()), BigDecimal.valueOf(Integer.valueOf(mSpare.get("price").toString())));
-                    mProductRow.add(a);
-                }
-                if(mProductRow.size()>0){
-                    mSectionDataModel.setAllItemsInSection(mProductRow);
-                    allData.add(mSectionDataModel);
-                    Log.d(TAG, "uncategorized dataset change event!");
-                    adapter.notifyDataSetChanged();
+                //safe checking is Fragment has already attached to An Activity
+                Activity activity = getActivity();
+                if(activity != null && isAdded()){
+                    for (ParseObject mSpare : Spare) {
+                        Product a = new Product(mSpare.getObjectId(), mSpare.get("name").toString(), mSpare.get("quality").toString(), NewArrivalFragment.this.getString(R.string.server_base_url) + mSpare.get("url").toString(), Integer.valueOf(mSpare.get("warranty").toString()), BigDecimal.valueOf(Integer.valueOf(mSpare.get("price").toString())));
+                        mProductRow.add(a);
+                    }
+                    if(mProductRow.size()>0){
+                        mSectionDataModel.setAllItemsInSection(mProductRow);
+                        allData.add(mSectionDataModel);
+                        Log.d(TAG, "uncategorized dataset change event!");
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             }
             else
@@ -115,53 +120,57 @@ public class NewArrivalFragment extends Fragment {
     mQuery.orderByDescending("createdAt");
     mQuery.findInBackground((Spare, err) -> {
     if(err == null && Spare.size() > 0) {
-        for (ParseObject mSpare : Spare) {
-            if (mSpare.getParseObject("generation") != null && mSpare.getParseObject("generation").getParseObject("model") != null && mSpare.getParseObject("generation").getParseObject("model").getParseObject("parent") != null){
-                Product a = new Product(mSpare.getObjectId(), mSpare.get("name").toString(), mSpare.get("quality").toString(), NewArrivalFragment.this.getString(R.string.server_base_url) + mSpare.get("url").toString(), Integer.valueOf(mSpare.get("warranty").toString()), BigDecimal.valueOf(Integer.valueOf(mSpare.get("price").toString())));
-                Arrival mArrival = new Arrival(mSpare.getParseObject("generation").getParseObject("model").getParseObject("parent").get("name").toString(),mSpare.getParseObject("generation").getParseObject("model").get("name").toString(),mSpare.getParseObject("generation").get("name").toString(),a,mSpare.getCreatedAt());
-                mArrivalList.add(mArrival);
+        //safe checking is Fragment has already attached to An Activity
+        Activity activity = getActivity();
+        if(activity != null && isAdded()){
+            for (ParseObject mSpare : Spare) {
+                if (mSpare.getParseObject("generation") != null && mSpare.getParseObject("generation").getParseObject("model") != null && mSpare.getParseObject("generation").getParseObject("model").getParseObject("parent") != null){
+                    Product a = new Product(mSpare.getObjectId(), mSpare.get("name").toString(), mSpare.get("quality").toString(), NewArrivalFragment.this.getString(R.string.server_base_url) + mSpare.get("url").toString(), Integer.valueOf(mSpare.get("warranty").toString()), BigDecimal.valueOf(Integer.valueOf(mSpare.get("price").toString())));
+                    Arrival mArrival = new Arrival(mSpare.getParseObject("generation").getParseObject("model").getParseObject("parent").get("name").toString(),mSpare.getParseObject("generation").getParseObject("model").get("name").toString(),mSpare.getParseObject("generation").get("name").toString(),a,mSpare.getCreatedAt());
+                    mArrivalList.add(mArrival);
+                }
             }
-        }
 //        Log.d(TAG, "mArrivalList Size =>"+mArrivalList.size());
 //        Log.d(TAG, "i HAVE =>"+mArrivalList.toString());
-        if(mArrivalList.size() > 0){
-            //sorting & Multimaping returned datas
-            //define group function
-            Function<Arrival,String> ArrivalGroupFunc = new Function<Arrival, String>() {
-                @Override
-                public String apply(Arrival input) {
-                    return input.model;
-                }
-            };
-            Multimap<String, Arrival> multimap = Multimaps.index(mArrivalList, ArrivalGroupFunc);
-            Log.d(TAG, "WE GOT =>"+ multimap.toString());
-            //setting section model
-            int mCount = 0;
-           for(String key : multimap.keySet()){
-               mCount++;
-               ArrayList<Product> mProductRow = new ArrayList<>();
-               ArrayList<Arrival> mArrivalArrayListRowData = new ArrayList<>();
-               Collection<Arrival> mCollectionRowData = multimap.get(key);
-               mArrivalArrayListRowData.addAll(mCollectionRowData);
-               SectionDataModel mSectionDataModel = new SectionDataModel();
-               mSectionDataModel.setHeaderTitle(mArrivalArrayListRowData.get(0).brand);
-               mSectionDataModel.setHeaderSubTitle(key);
-               for(int i = 0; i < mArrivalArrayListRowData.size(); i++){
-                   if(i == 5){
-                       break;
-                   }
-                   Product mProduct = mArrivalArrayListRowData.get(i).getProduct();
-                   mProductRow.add(mProduct);
-               }
+            if(mArrivalList.size() > 0){
+                //sorting & Multimaping returned datas
+                //define group function
+                Function<Arrival,String> ArrivalGroupFunc = new Function<Arrival, String>() {
+                    @Override
+                    public String apply(Arrival input) {
+                        return input.model;
+                    }
+                };
+                Multimap<String, Arrival> multimap = Multimaps.index(mArrivalList, ArrivalGroupFunc);
+                Log.d(TAG, "WE GOT =>"+ multimap.toString());
+                //setting section model
+                int mCount = 0;
+                for(String key : multimap.keySet()){
+                    mCount++;
+                    ArrayList<Product> mProductRow = new ArrayList<>();
+                    ArrayList<Arrival> mArrivalArrayListRowData = new ArrayList<>();
+                    Collection<Arrival> mCollectionRowData = multimap.get(key);
+                    mArrivalArrayListRowData.addAll(mCollectionRowData);
+                    SectionDataModel mSectionDataModel = new SectionDataModel();
+                    mSectionDataModel.setHeaderTitle(mArrivalArrayListRowData.get(0).brand);
+                    mSectionDataModel.setHeaderSubTitle(key);
+                    for(int i = 0; i < mArrivalArrayListRowData.size(); i++){
+                        if(i == 5){
+                            break;
+                        }
+                        Product mProduct = mArrivalArrayListRowData.get(i).getProduct();
+                        mProductRow.add(mProduct);
+                    }
 
-               if(mCount == 10){
-                   break;
-               }
-               mSectionDataModel.setAllItemsInSection(mProductRow);
-               allData.add(mSectionDataModel);
-           }
-            Log.d(TAG, "categorized dataset change event!");
-            adapter.notifyDataSetChanged();
+                    if(mCount == 10){
+                        break;
+                    }
+                    mSectionDataModel.setAllItemsInSection(mProductRow);
+                    allData.add(mSectionDataModel);
+                }
+                Log.d(TAG, "categorized dataset change event!");
+                adapter.notifyDataSetChanged();
+            }
         }
     }
     });

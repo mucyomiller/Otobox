@@ -13,11 +13,17 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.orhanobut.hawk.Hawk;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.util.ArrayList;
 
 import rw.sd.otobox.Adapters.SectionsPagerAdapter;
 import rw.sd.otobox.Fragments.BrandsFragment;
@@ -30,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private ArrayList<String> mAboutInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +51,24 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //retrieving About Us Information from Server
+        mAboutInfo = new ArrayList<>();
+        //retrieving data first form cache then online
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Contact");
+        query.fromNetwork().getFirstInBackground((object, e) -> {
+            if(e == null){
+                Log.d(TAG, "getMaterialAboutList: Data");
+                //setting mAbout ArrayList
+                mAboutInfo.add(object.get("website").toString());
+                mAboutInfo.add(object.get("phone").toString());
+                mAboutInfo.add(object.get("email").toString());
+                mAboutInfo.add(object.get("lat").toString());
+                mAboutInfo.add(object.get("long").toString());
+                Log.d(TAG, "getMaterialAboutList: GOT =>"+ mAboutInfo.toString());
+                Hawk.put("mAboutInfo",mAboutInfo);
+            }
+        });
     }
 
     /**
@@ -93,6 +118,15 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.getTabAt(0).setText("Brands");
         tabLayout.getTabAt(1).setText("New Arrivals");
+
+        //checking if we are comming from OrderActivity to switch to NewArrivals Tab
+        Intent ourIntent = getIntent();
+        if(ourIntent != null){
+            boolean checkIfTrue = ourIntent.getBooleanExtra("goto_new_arrivals",false);
+            if(checkIfTrue){
+                mViewPager.setCurrentItem(1);
+            }
+        }
     }
 
 

@@ -1,6 +1,7 @@
 package rw.sd.otobox.Fragments;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -88,13 +89,15 @@ public class BrandsFragment extends Fragment {
         query.findInBackground((Brand, e) -> {
             if(e == null)
             {
-                Log.d(TAG, "counter: "+Brand.size());
-                for (ParseObject mBrand: Brand) {
-                    Brand a = new Brand(mBrand.getObjectId(),mBrand.get("name").toString(),1 , getString(R.string.server_base_url)+mBrand.get("url").toString());
-                    brandList.add(a);
+                Activity activity = getActivity();
+                if(activity != null && isAdded()){
+                    Log.d(TAG, "counter: "+Brand.size());
+                    for (ParseObject mBrand: Brand) {
+                        Brand a = new Brand(mBrand.getObjectId(),mBrand.get("name").toString(),1 , getString(R.string.server_base_url)+mBrand.get("url").toString());
+                        brandList.add(a);
+                    }
+                    adapter.notifyItemRangeChanged(0,brandList.size());
                 }
-
-                adapter.notifyItemRangeChanged(0,brandList.size());
             }
             else{
                 Toasty.error(getContext(),"Oops Connection Error",Toast.LENGTH_SHORT,true).show();

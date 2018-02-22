@@ -7,16 +7,19 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mucyomiller.shoppingcart.model.Cart;
 import com.mucyomiller.shoppingcart.model.Saleable;
+import com.mucyomiller.shoppingcart.util.CartHelper;
 import com.orhanobut.hawk.Hawk;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -45,6 +48,7 @@ public class OrderActivity extends AppCompatActivity {
     private EditText vin;
     private TextView totalprice,vat,totalitems;
     private Button send;
+    private LottieAnimationView mSendAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,7 @@ public class OrderActivity extends AppCompatActivity {
         names = (EditText) findViewById(R.id.names);
         phone = (EditText) findViewById(R.id.phone);
         location = (EditText) findViewById(R.id.location);
+        mSendAnimation = findViewById(R.id.send_loading_animation);
         send = (Button) findViewById(R.id.send);
 
         //check if userInfo exists and pre-fill user user opted-in
@@ -102,7 +107,8 @@ public class OrderActivity extends AppCompatActivity {
             if(validate())
             {
                 //disable button
-                send.setEnabled(false);
+                send.setVisibility(View.GONE);
+                mSendAnimation.setVisibility(View.VISIBLE);
                 //getting cart items
                 List<CartItem> cartItems = new ArrayList<CartItem>();
                 Map<Saleable, Integer> itemMap = (Map<Saleable, Integer>)cart.getItemWithQuantity();
@@ -126,27 +132,36 @@ public class OrderActivity extends AppCompatActivity {
                     orderObject.put("vat", (cart.getTotalPrice().multiply(BigDecimal.valueOf(18))).divide(BigDecimal.valueOf(100)));
                     orderObject.put("itemcount",cart.getTotalQuantity());
                     orderObject.put("vin",vin.getText().toString());
-                    orderObject.save();
-                    //saving user infos on disk
-                    ArrayList<String> userInfo = new ArrayList<>();
-                    userInfo.add(names.getText().toString());
-                    userInfo.add(phone.getText().toString());
-                    userInfo.add(location.getText().toString());
-                    userInfo.add(vin.getText().toString());
-                    //commit to disk
-                    Hawk.put("userInfo",userInfo);
-                    Toast.makeText(getApplicationContext(),"Order Sent Successfull",Toast.LENGTH_LONG).show();
-                    // redirect back to MainActivity
-                    Intent mIntent = new Intent(getApplicationContext(),MainActivity.class);
-                    finish();
-                    startActivity(mIntent);
-                    //save basic info is temp storage
-                    
+                    orderObject.saveInBackground(e -> {
+                        if(e== null){
+                            //saving user infos on disk
+                            ArrayList<String> userInfo = new ArrayList<>();
+                            userInfo.add(names.getText().toString());
+                            userInfo.add(phone.getText().toString());
+                            userInfo.add(location.getText().toString());
+                            userInfo.add(vin.getText().toString());
+                            //commit to disk
+                            Hawk.put("userInfo",userInfo);
+                            Toasty.info(getApplicationContext(),"Order Sent Successfull",Toast.LENGTH_LONG).show();
+                            //clearing cart after sending order!
+                            CartHelper.getCart().clear();
+                            // redirect back to MainActivity
+                            Intent mIntent = new Intent(getApplicationContext(),MainActivity.class);
+                            mIntent.putExtra("goto_new_arrivals",true);
+                            finish();
+                            startActivity(mIntent);
+                        }else
+                        {
+                            Toasty.error(getApplicationContext(),"Error occured in saving try again!",Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                            send.setVisibility(View.VISIBLE);
+                            mSendAnimation.setVisibility(View.GONE);
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
-                } catch (ParseException e) {
-                    Toast.makeText(getApplicationContext(),"error occured in saving try again!",Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
+                    send.setVisibility(View.VISIBLE);
+                    mSendAnimation.setVisibility(View.GONE);
                 }
             }
         });

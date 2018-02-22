@@ -1,0 +1,41 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml:2:1-10:12
+INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml:2:1-10:12
+INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml:2:1-10:12
+INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml:2:1-10:12
+INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml:2:1-10:12
+INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml:2:1-10:12
+INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml:2:1-10:12
+	package
+		ADDED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml:3:5-43
+		INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+		INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+		ADDED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml:2:1-10:12
+		INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+		ADDED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml:2:1-10:12
+		INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml:4:5-63
+application
+ADDED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml:6:5-8:19
+	android:allowBackup
+		ADDED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml:7:9-35
+uses-sdk
+INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+		ADDED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+		INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+		ADDED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml
+		INJECTED from /home/miller/AndroidStudioProjects/Otobox/library/src/main/AndroidManifest.xml

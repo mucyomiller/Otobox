@@ -165,14 +165,26 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rectangular"/>
-        <Button
-            android:id="@+id/send"
-            android:text="Ohereza"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:background="@color/colorPrimary"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/send_loading_animation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:lottie_fileName="otobox_circle_anim.json"
+                app:lottie_loop="true"
+                app:lottie_autoPlay="true" />
+            <Button
+                android:id="@+id/send"
+                android:text="Ohereza"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:background="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
     </android.support.v7.widget.LinearLayoutCompat>
 
 </RelativeLayout>
