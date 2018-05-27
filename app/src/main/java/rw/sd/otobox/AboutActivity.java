@@ -154,6 +154,7 @@ public class AboutActivity extends MaterialAboutActivity {
             sendIntent.setAction(Intent.ACTION_VIEW);
 
             String url = "https://api.whatsapp.com/send?phone="+ PhoneNumberUtils.stripSeparators(phone);
+//            String url = "https://api.whatsapp.com/send?phone=250782535706";
             sendIntent.setData(Uri.parse(url));
             startActivity(sendIntent);
         }));
